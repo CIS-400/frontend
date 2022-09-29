@@ -1,11 +1,17 @@
-import React from 'react';
-import { Route, Routes } from 'react-router-dom'
+import { useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
+import getClientControllerInstance from "./client-controller";
 
 import Home from './pages/Home'
 import Lobby from './pages/Lobby'
 import Lobbies from './pages/Lobbies'
 
 function App() {
+  useEffect(() => {
+    const cc = getClientControllerInstance();
+    console.log("instantiated client controller");
+  }, []);
+
   return (
     <Routes>
       <Route path="/" element={<Home />} />
