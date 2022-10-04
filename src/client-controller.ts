@@ -7,15 +7,12 @@ export class ClientController {
 
   constructor() {
     this.socket = io('http://localhost:8000/dev');
-    this.socket.on(
-      'chat-message',
-      ((data: any) => {
-        console.log('in cc, this is', this);
-        this.serverEventListeners['chat-message'].forEach((listener) =>
-          listener(data),
-        );
-      }).bind(this),
-    );
+    this.socket.on('chat-message', (data: any) => {
+      console.log('in cc, this is', this);
+      this.serverEventListeners['chat-message'].forEach((listener) =>
+        listener(data),
+      );
+    });
   }
 
   public addServerEventListener(
