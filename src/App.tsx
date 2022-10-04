@@ -1,24 +1,50 @@
-import { useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
-import getClientControllerInstance from "./client-controller";
+import React, { useEffect, useRef, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import getClientControllerInstance, {
+  ClientController,
+} from './client-controller';
 
-import Home from './pages/Home'
-import Lobby from './pages/Lobby'
-import Lobbies from './pages/Lobbies'
+import Home from './pages/Home';
+import Lobby from './pages/Lobby';
+import Lobbies from './pages/Lobbies';
 
-function App() {
-  useEffect(() => {
-    const cc = getClientControllerInstance();
-    console.log("instantiated client controller");
-  }, []);
+export default class App extends React.Component<{}, { chat: string[] }> {
+  cc: ClientController;
+  constructor(props: {} | Readonly<{}>) {
+    super(props);
+    this.state = {
+      chat: [],
+    };
+    this.callback = this.callback.bind(this);
+    this.cc = getClientControllerInstance();
+  }
 
-  return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/lobbies" element={<Lobbies />} />
-      <Route path="/:lobbyid" element={<Lobby />} />
-    </Routes>
-  );
+  componentDidMount() {
+    this.cc.addServerEventListener('chat-message', this.callback);
+  }
+
+  callback(data: { message: string }) {
+    this.setState({ chat: [...this.state.chat, data.message] });
+  }
+
+  render() {
+    return (
+      <>
+        <button
+          onClick={() => {
+            let a = Math.random().toString();
+            this.setState({ chat: [...this.state.chat, a] });
+            this.cc.sendChatMessage(a);
+          }}
+        >
+          click me
+        </button>
+        <ul>
+          {this.state.chat.map((message) => (
+            <li key={message}>{message}</li>
+          ))}
+        </ul>
+      </>
+    );
+  }
 }
-
-export default App;
