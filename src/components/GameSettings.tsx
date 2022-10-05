@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { LobbySettings, GameSpeed } from '@backend/lobby'
+import { LobbySettings, GameSpeed } from '../../../backend/src/lobby';
 
 export default class GameSettings extends React.Component<
   { lobbyid: string },
@@ -28,10 +28,30 @@ export default class GameSettings extends React.Component<
           <input type="text" />
 
           <h2> Private Game </h2>
-          <input type="checkbox" onChange={e => this.setState({ settings: {...this.state.settings, isPrivate: !this.state.settings.isPrivate}})} />
+          <input
+            type="checkbox"
+            onChange={(e) =>
+              this.setState({
+                settings: {
+                  ...this.state.settings,
+                  isPrivate: !this.state.settings.isPrivate,
+                },
+              })
+            }
+          />
 
           <h2> Hide Bank Cards</h2>
-          <input type="checkbox" onChange={e => this.setState({ settings: {...this.state.settings, hideBankCards: !this.state.settings.hideBankCards}})} />
+          <input
+            type="checkbox"
+            onChange={(e) =>
+              this.setState({
+                settings: {
+                  ...this.state.settings,
+                  hideBankCards: !this.state.settings.hideBankCards,
+                },
+              })
+            }
+          />
 
           <h2> Game Speed </h2>
 
