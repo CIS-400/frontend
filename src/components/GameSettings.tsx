@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { LobbySettings, GameSpeed } from '@backend/lobby';
+import { LobbySettings, GameSpeed } from '@backend/lobby'
 
 export default class GameSettings extends React.Component<
   { lobbyid: string },
