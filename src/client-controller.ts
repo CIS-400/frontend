@@ -1,14 +1,14 @@
 import { io, Socket } from 'socket.io-client';
 
-export class ClientController {
+export default class ClientController {
+  private static instance: ClientController | undefined;
   private socket: Socket;
   private serverEventListeners: Record<string, ((...args: any[]) => void)[]> =
     {};
 
-  constructor() {
+  private constructor() {
     this.socket = io('http://localhost:8000/dev');
     this.socket.on('chat-message', (data: any) => {
-      console.log('in cc, this is', this);
       this.serverEventListeners['chat-message'].forEach((listener) =>
         listener(data),
       );
@@ -28,13 +28,11 @@ export class ClientController {
   public sendChatMessage(message: string) {
     this.socket.emit('chat-message', { message });
   }
-}
 
-let clientController: ClientController | null = null;
-export default function getClientControllerInstance() {
-  if (clientController !== null) {
-    return clientController;
+  public static getInstance() {
+    if (ClientController.instance === undefined) {
+      ClientController.instance = new ClientController();
+    }
+    return ClientController.instance;
   }
-  clientController = new ClientController();
-  return clientController;
 }

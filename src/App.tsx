@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import getClientControllerInstance, {
-  ClientController,
-} from './client-controller';
+import ClientController from './client-controller';
 
 import Home from './pages/Home';
 import Lobby from './pages/Lobby';
@@ -16,7 +14,7 @@ export default class App extends React.Component<{}, { chat: string[] }> {
       chat: [],
     };
     this.callback = this.callback.bind(this);
-    this.cc = getClientControllerInstance();
+    this.cc = ClientController.getInstance();
   }
 
   componentDidMount() {
