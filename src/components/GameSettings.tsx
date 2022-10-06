@@ -1,20 +1,40 @@
-import React from 'react';
+import React from 'react'
 
-import { LobbySettings, GameSpeed } from '../../../backend/src/lobby';
+import { LobbySettings, GameSpeed } from '../../../backend/src/lobby'
+import lobbyContext from '../lobby-context'
 
 export default class GameSettings extends React.Component<
   { lobbyid: string },
   { settings: LobbySettings }
 > {
+  static contextType = lobbyContext
+  context!: React.ContextType<typeof lobbyContext>
   constructor(props: { lobbyid: string }) {
-    super(props);
+    super(props)
     this.state = {
       settings: {
         isPrivate: false,
         hideBankCards: false,
         gameSpeed: GameSpeed.Medium,
       },
-    };
+    }
+    this.onUpdateSettings = this.onUpdateSettings.bind(this)
+    this.onUpdateLocalSettings = this.onUpdateLocalSettings.bind(this)
+  }
+
+  componentDidMount(): void {
+    this.context.clientController.addServerEventListener(
+      'update-settings',
+      this.onUpdateSettings,
+    )
+  }
+  onUpdateSettings(settings: LobbySettings) {
+    this.setState({ settings })
+  }
+
+  onUpdateLocalSettings(settings: LobbySettings) {
+    this.setState({ settings })
+    this.context.clientController.updateSettings(settings)
   }
 
   render() {
@@ -22,43 +42,41 @@ export default class GameSettings extends React.Component<
       <>
         <h1> Game Settings</h1>
         <div>
-          <h2> Invite friends with this code: {this.props.lobbyid} </h2>
-
+          <div> Invite friends with this code: {this.props.lobbyid} </div>
           {/* TODO: have input be placeholder for url, readonly and copy to clipboard */}
           <input type="text" />
-
-          <h2> Private Game </h2>
+          <div> Private Game </div>
           <input
             type="checkbox"
             onChange={(e) =>
-              this.setState({
-                settings: {
-                  ...this.state.settings,
-                  isPrivate: !this.state.settings.isPrivate,
-                },
+              this.onUpdateLocalSettings({
+                ...this.state.settings,
+                isPrivate: e.target.checked,
               })
             }
+            checked={this.state.settings.isPrivate}
           />
-
-          <h2> Hide Bank Cards</h2>
+          <div> Hide Bank Cards</div>
           <input
             type="checkbox"
             onChange={(e) =>
-              this.setState({
-                settings: {
-                  ...this.state.settings,
-                  hideBankCards: !this.state.settings.hideBankCards,
-                },
+              this.onUpdateLocalSettings({
+                ...this.state.settings,
+                hideBankCards: e.target.checked,
               })
             }
+            checked={this.state.settings.hideBankCards}
           />
-
-          <h2> Game Speed </h2>
-
-          <h2> I'm Ready </h2>
+          <div> Game Speed </div>
+          <input
+            type="checkbox"
+            onChange={(e) => {
+              this.context.clientController.setReadyStatus(e.target.checked)
+            }}
+          />
           {/* start game button shows only for p1 */}
         </div>
       </>
-    );
+    )
   }
 }

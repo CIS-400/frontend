@@ -1,35 +1,27 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React from 'react'
+import { useParams } from 'react-router-dom'
 
-import GameSettings from '../components/GameSettings';
-import LobbyChat from '../components/LobbyChat';
+import GameSettings from '../components/GameSettings'
+import LobbyChat from '../components/LobbyChat'
+import PlayerList from '../components/PlayerList'
+import lobbyContext from '../lobby-context'
 
 export default class Lobby extends React.Component<{}> {
+  static contextType = lobbyContext
+  context!: React.ContextType<typeof lobbyContext>
+  componentDidMount(): void {
+    this.context.clientController.initializeConnection('dev')
+  }
   render() {
     return (
       <>
         <h1>Lobby</h1>
-
-        <GameSettings lobbyid='dev' />
+        <GameSettings lobbyid="dev" />
         <hr />
         <LobbyChat />
+        <hr />
+        <PlayerList />
       </>
-    );
+    )
   }
 }
-// const Lobby = () => {
-//   // const [isPrivate, setIsPrivate] = useState(false);
-
-//   // useEffect(() => {
-//   //   const { cc } = useContext();
-//   //   setIsPrivate(cc.getLobbySettings().isPrivate);
-//   //   cc.addOnLobbySettingsChangeListener((lobbySettings) => {
-//   //     setIsPrivate(lobbySettings.isPrivate);
-//   //   });
-//   // }, []);
-
-//   const { lobbyid } = useParams();
-//   return <h1> Lobby ID: {lobbyid} </h1>;
-// };
-
-// export default Lobby;
