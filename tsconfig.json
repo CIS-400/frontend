@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "target": "es5",
     "lib": [
       "dom",
@@ -16,7 +17,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "paths": {
-      "@backend/*": ["../backend/src/*"]
+      "@backend/*": ["../backend/src/*", ""]
     },
     "resolveJsonModule": true,
     "isolatedModules": true,

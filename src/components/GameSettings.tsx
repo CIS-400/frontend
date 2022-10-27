@@ -7,8 +7,6 @@ export default class GameSettings extends React.Component<
   { lobbyid: string },
   { settings: LobbySettings }
 > {
-  static contextType = lobbyContext
-  context!: React.ContextType<typeof lobbyContext>
   constructor(props: { lobbyid: string }) {
     super(props)
     this.state = {
@@ -23,7 +21,7 @@ export default class GameSettings extends React.Component<
   }
 
   componentDidMount(): void {
-    this.context.clientController.addServerEventListener(
+    lobbyContext.clientController.addServerEventListener(
       'update-settings',
       this.onUpdateSettings,
     )
@@ -34,7 +32,7 @@ export default class GameSettings extends React.Component<
 
   onUpdateLocalSettings(settings: LobbySettings) {
     this.setState({ settings })
-    this.context.clientController.updateSettings(settings)
+    lobbyContext.clientController.updateSettings(settings)
   }
 
   render() {
@@ -67,11 +65,11 @@ export default class GameSettings extends React.Component<
             }
             checked={this.state.settings.hideBankCards}
           />
-          <div> Game Speed </div>
+          <div>Game Speed</div>
           <input
             type="checkbox"
             onChange={(e) => {
-              this.context.clientController.setReadyStatus(e.target.checked)
+              lobbyContext.clientController.setReadyStatus(e.target.checked)
             }}
           />
           {/* start game button shows only for p1 */}

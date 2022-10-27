@@ -1,4 +1,4 @@
-import { GameSpeed, LobbySettings } from '@backend/lobby'
+import { GameSpeed, LobbySettings } from '../../backend/src/lobby'
 import React, { createContext, useReducer } from 'react'
 
 interface ChatMessage {
@@ -55,7 +55,7 @@ const reducer = (
         (pid) => pid !== (action.payload as string),
       )
   }
-  return state
+  return { ...state }
 }
 
 const Store = ({ children }: { children: React.ReactNode }) => {

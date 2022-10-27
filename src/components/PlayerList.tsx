@@ -4,13 +4,15 @@ import { AppContext, AppStateAction } from '../store'
 
 const PlayerList = () => {
   const [state, dispatch] = useContext(AppContext)
-  const lobbyCtx = useContext(lobbyContext)
 
   useEffect(() => {
-    lobbyCtx.clientController.addServerEventListener('add-player', ({ pid }) =>
-      dispatch({ type: AppStateAction.AddPlayer, payload: pid }),
+    lobbyContext.clientController.addServerEventListener(
+      'add-player',
+      ({ pid }) => {
+        dispatch({ type: AppStateAction.AddPlayer, payload: pid })
+      },
     )
-    lobbyCtx.clientController.addServerEventListener(
+    lobbyContext.clientController.addServerEventListener(
       'remove-player',
       ({ pid }) =>
         dispatch({ type: AppStateAction.RemovePlayer, payload: pid }),
@@ -19,12 +21,13 @@ const PlayerList = () => {
 
   return (
     <div>
+      <h1>Player List</h1>
       {state.lobby.pids.map((pid) => (
         <div key={pid}>
-          <div>{lobbyCtx.clientController.playerData[pid].name}</div>
+          <div>{lobbyContext.clientController.playerData[pid].name}</div>
           <input
             type="checkbox"
-            checked={lobbyCtx.clientController.playerData[pid].ready}
+            checked={lobbyContext.clientController.playerData[pid].ready}
             readOnly={true}
           />
         </div>

@@ -7,10 +7,8 @@ import PlayerList from '../components/PlayerList'
 import lobbyContext from '../lobby-context'
 
 export default class Lobby extends React.Component<{}> {
-  static contextType = lobbyContext
-  context!: React.ContextType<typeof lobbyContext>
   componentDidMount(): void {
-    this.context.clientController.initializeConnection('dev')
+    lobbyContext.clientController.initializeConnection('dev')
   }
   render() {
     return (
