@@ -48,14 +48,25 @@ const reducer = (
       }
       break
     case AppStateAction.AddPlayer:
-      state.lobby.pids = [...state.lobby.pids, action.payload as string]
-      break
+      return {
+        ...state,
+        lobby: {
+          ...state.lobby,
+          pids: [...state.lobby.pids, action.payload as string],
+        },
+      }
     case AppStateAction.RemovePlayer:
-      state.lobby.pids = state.lobby.pids.filter(
-        (pid) => pid !== (action.payload as string),
-      )
+      return {
+        ...state,
+        lobby: {
+          ...state.lobby,
+          pids: state.lobby.pids.filter(
+            (pid) => pid !== (action.payload as string),
+          ),
+        },
+      }
   }
-  return { ...state }
+  return state
 }
 
 const Store = ({ children }: { children: React.ReactNode }) => {

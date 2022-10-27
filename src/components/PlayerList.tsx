@@ -3,21 +3,7 @@ import lobbyContext from '../lobby-context'
 import { AppContext, AppStateAction } from '../store'
 
 const PlayerList = () => {
-  const [state, dispatch] = useContext(AppContext)
-
-  useEffect(() => {
-    lobbyContext.clientController.addServerEventListener(
-      'add-player',
-      ({ pid }) => {
-        dispatch({ type: AppStateAction.AddPlayer, payload: pid })
-      },
-    )
-    lobbyContext.clientController.addServerEventListener(
-      'remove-player',
-      ({ pid }) =>
-        dispatch({ type: AppStateAction.RemovePlayer, payload: pid }),
-    )
-  }, [])
+  const [state] = useContext(AppContext)
 
   return (
     <div>

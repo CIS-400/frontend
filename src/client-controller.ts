@@ -47,6 +47,13 @@ export default class ClientController {
     })
   }
 
+  public clearServerEventListeners() {
+    const events = Object.keys(
+      this.serverEventListeners,
+    ) as (keyof ServerToClientEvents)[]
+    events.forEach((e) => (this.serverEventListeners[e] = []))
+  }
+
   public addServerEventListener(
     event: keyof ServerToClientEvents,
     callback: (...args: any[]) => void,
