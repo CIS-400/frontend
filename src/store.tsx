@@ -10,7 +10,7 @@ interface AppState {
   lobby: {
     settings: LobbySettings
     chat: ChatMessage[]
-    pids: string[]
+    players: { pid: string; name: string; ready: boolean }[]
   }
 }
 
@@ -22,7 +22,7 @@ const initialState: AppState = {
       gameSpeed: GameSpeed.Medium,
     },
     chat: [],
-    pids: [],
+    players: [],
   },
 }
 
@@ -31,6 +31,7 @@ export enum AppStateAction {
   ChangeLobbySetting,
   AddPlayer,
   RemovePlayer,
+  SetReadyStatus,
 }
 
 const reducer = (
@@ -39,20 +40,39 @@ const reducer = (
 ): AppState => {
   switch (action.type) {
     case AppStateAction.SendChatMessage:
-      state.lobby.chat = [...state.lobby.chat, action.payload as ChatMessage]
-      break
-    case AppStateAction.ChangeLobbySetting:
-      state.lobby.settings = {
-        ...state.lobby.settings,
-        ...(action.payload as Partial<LobbySettings>),
+      return {
+        ...state,
+        lobby: {
+          ...state.lobby,
+          chat: [
+            ...state.lobby.chat,
+            {
+              sender:
+                state.lobby.players.find(
+                  ({ pid }) => pid === action.payload.pid,
+                )?.name || 'unknown',
+              message: action.payload.message,
+            },
+          ],
+        },
       }
-      break
+    case AppStateAction.ChangeLobbySetting:
+      return {
+        ...state,
+        lobby: {
+          ...state.lobby,
+          settings: { ...action.payload },
+        },
+      }
     case AppStateAction.AddPlayer:
       return {
         ...state,
         lobby: {
           ...state.lobby,
-          pids: [...state.lobby.pids, action.payload as string],
+          players: [
+            ...state.lobby.players,
+            { ...action.payload, ready: false },
+          ],
         },
       }
     case AppStateAction.RemovePlayer:
@@ -60,13 +80,25 @@ const reducer = (
         ...state,
         lobby: {
           ...state.lobby,
-          pids: state.lobby.pids.filter(
-            (pid) => pid !== (action.payload as string),
+          players: state.lobby.players.filter(
+            ({ pid }) => pid !== (action.payload.pid as string),
           ),
         },
       }
+    case AppStateAction.SetReadyStatus:
+      return {
+        ...state,
+        lobby: {
+          ...state.lobby,
+          players: state.lobby.players.map((player) => {
+            if (player.pid === action.payload.pid) {
+              return { ...player, ready: action.payload.ready }
+            }
+            return player
+          }),
+        },
+      }
   }
-  return state
 }
 
 const Store = ({ children }: { children: React.ReactNode }) => {
@@ -78,6 +110,14 @@ const Store = ({ children }: { children: React.ReactNode }) => {
   )
 }
 
-export const AppContext = createContext<[AppState, any?]>([initialState])
+export const AppContext = createContext<
+  [
+    AppState,
+    React.Dispatch<{
+      type: AppStateAction
+      payload: any
+    }>,
+  ]
+>([initialState, () => {}])
 
 export default Store

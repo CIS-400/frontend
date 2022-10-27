@@ -62,7 +62,7 @@ export default class ClientController {
   }
 
   public sendChatMessage(message: string) {
-    this.socket!.emit('chat-message', { message })
+    this.socket!.emit('chat-message', message)
   }
 
   public setReadyStatus(ready: boolean) {

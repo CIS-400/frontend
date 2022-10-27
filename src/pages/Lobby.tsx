@@ -2,7 +2,7 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 
 import GameSettings from '../components/GameSettings'
-//import LobbyChat from '../components/LobbyChat'
+import LobbyChat from '../components/LobbyChat'
 import PlayerList from '../components/PlayerList'
 import lobbyContext from '../lobby-context'
 import { AppContext, AppStateAction } from '../store'
@@ -12,30 +12,33 @@ export default class Lobby extends React.Component<{}> {
   context!: React.ContextType<typeof AppContext>
   componentDidMount(): void {
     const [state, dispatch] = this.context
-    console.log([...state.lobby.pids])
-    lobbyContext.clientController.initializeConnection('dev')
-    lobbyContext.clientController.clearServerEventListeners()
-    lobbyContext.clientController.addServerEventListener(
-      'add-player',
-      ({ pid }) => {
-        console.log('dispatch!')
-        dispatch({ type: AppStateAction.AddPlayer, payload: pid })
-      },
+    const { clientController } = lobbyContext
+    clientController.initializeConnection('dev')
+    clientController.clearServerEventListeners()
+    clientController.addServerEventListener('add-player', (payload) =>
+      dispatch({ type: AppStateAction.AddPlayer, payload }),
     )
-    lobbyContext.clientController.addServerEventListener(
-      'remove-player',
-      ({ pid }) =>
-        dispatch({ type: AppStateAction.RemovePlayer, payload: pid }),
+    clientController.addServerEventListener('remove-player', (payload) =>
+      dispatch({ type: AppStateAction.RemovePlayer, payload }),
+    )
+    clientController.addServerEventListener('set-ready-status', (payload) =>
+      dispatch({ type: AppStateAction.SetReadyStatus, payload }),
+    )
+    clientController.addServerEventListener('update-settings', (payload) =>
+      dispatch({ type: AppStateAction.ChangeLobbySetting, payload }),
+    )
+    clientController.addServerEventListener('chat-message', (payload) =>
+      dispatch({ type: AppStateAction.SendChatMessage, payload }),
     )
   }
   render() {
     return (
       <>
-        {/* <h1>Lobby</h1>
+        <h1>Lobby</h1>
         <GameSettings lobbyid="dev" />
         <hr />
         <LobbyChat />
-        <hr /> */}
+        <hr />
         <PlayerList />
       </>
     )
