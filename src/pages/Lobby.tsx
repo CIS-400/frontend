@@ -1,3 +1,4 @@
+import { LobbyStatus } from '../../../backend/src/lobby'
 import React from 'react'
 import { useParams } from 'react-router-dom'
 
@@ -30,17 +31,30 @@ export default class Lobby extends React.Component<{}> {
     clientController.addServerEventListener('chat-message', (payload) =>
       dispatch({ type: AppStateAction.SendChatMessage, payload }),
     )
+    clientController.addServerEventListener('start-game', () =>
+      dispatch({
+        type: AppStateAction.SetLobbyStatus,
+        payload: LobbyStatus.InGame,
+      }),
+    )
   }
   render() {
-    return (
-      <>
-        <h1>Lobby</h1>
-        <GameSettings lobbyid="dev" />
-        <hr />
-        <LobbyChat />
-        <hr />
-        <PlayerList />
-      </>
-    )
+    const [state, dispatch] = this.context
+    switch (state.lobby.status) {
+      case LobbyStatus.PreGame:
+        return (
+          <>
+            <GameSettings lobbyid="dev" />
+            <hr />
+            <LobbyChat />
+            <hr />
+            <PlayerList />
+          </>
+        )
+      case LobbyStatus.InGame:
+        return <div>i am in game</div>
+      case LobbyStatus.PostGame:
+        return <div>i am post game</div>
+    }
   }
 }

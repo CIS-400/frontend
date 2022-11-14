@@ -1,4 +1,4 @@
-import { GameSpeed, LobbySettings } from '../../backend/src/lobby'
+import { GameSpeed, LobbySettings, LobbyStatus } from '../../backend/src/lobby'
 import React, { createContext, useReducer } from 'react'
 
 interface ChatMessage {
@@ -12,6 +12,7 @@ interface AppState {
     chat: ChatMessage[]
     players: { pid: string; name: string; ready: boolean }[]
     owner?: string
+    status: LobbyStatus
   }
 }
 
@@ -24,6 +25,7 @@ const initialState: AppState = {
     },
     chat: [],
     players: [],
+    status: LobbyStatus.PreGame,
   },
 }
 
@@ -33,6 +35,7 @@ export enum AppStateAction {
   AddPlayer,
   RemovePlayer,
   SetReadyStatus,
+  SetLobbyStatus,
 }
 
 const reducer = (
@@ -74,22 +77,18 @@ const reducer = (
             ...state.lobby.players,
             { ...action.payload, ready: false },
           ],
-          owner: state.lobby.owner || action.payload.pid,
+          owner: action.payload.owner,
         },
       }
     case AppStateAction.RemovePlayer:
-      const newPlayers = state.lobby.players.filter(
-        ({ pid }) => pid !== (action.payload.pid as string),
-      )
       return {
         ...state,
         lobby: {
           ...state.lobby,
-          players: newPlayers,
-          owner:
-            state.lobby.owner !== action.payload.pid
-              ? state.lobby.owner
-              : newPlayers[0]?.pid,
+          players: state.lobby.players.filter(
+            ({ pid }) => pid !== (action.payload.pid as string),
+          ),
+          owner: action.payload.owner,
         },
       }
     case AppStateAction.SetReadyStatus:
@@ -97,12 +96,19 @@ const reducer = (
         ...state,
         lobby: {
           ...state.lobby,
-          players: state.lobby.players.map((player) => {
-            if (player.pid === action.payload.pid) {
-              return { ...player, ready: action.payload.ready }
-            }
-            return player
-          }),
+          players: state.lobby.players.map((player) =>
+            player.pid === action.payload.pid
+              ? { ...player, ready: action.payload.ready }
+              : player,
+          ),
+        },
+      }
+    case AppStateAction.SetLobbyStatus:
+      return {
+        ...state,
+        lobby: {
+          ...state.lobby,
+          status: action.payload,
         },
       }
   }

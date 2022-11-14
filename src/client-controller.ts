@@ -6,8 +6,8 @@ import {
 import { LobbySettings } from '@backend/lobby'
 
 export default class ClientController {
-  private socket: Socket<ServerToClientEvents, ClientToServerEvents> | undefined
-  public pid: string | undefined
+  private socket?: Socket<ServerToClientEvents, ClientToServerEvents>
+  public pid?: string
   private serverEventListeners: Record<
     keyof ServerToClientEvents,
     ((...args: any[]) => void)[]
@@ -18,6 +18,7 @@ export default class ClientController {
     'update-settings': [],
     'remove-player': [],
     'lobby-is-full': [],
+    'start-game': [],
   }
 
   public initializeConnection(lid: string) {
@@ -61,6 +62,10 @@ export default class ClientController {
 
   public updateSettings(settings: LobbySettings) {
     this.socket!.emit('update-settings', settings)
+  }
+
+  public startGame() {
+    this.socket!.emit('start-game')
   }
 }
 

@@ -1,9 +1,14 @@
 import React, { useContext } from 'react'
 
-import { LobbySettings, GameSpeed } from '../../../backend/src/lobby'
+import {
+  LobbySettings,
+  GameSpeed,
+  LobbyStatus,
+} from '../../../backend/src/lobby'
 import lobbyContext from '../lobby-context'
 import Lobby from '../pages/Lobby'
 import { AppContext, AppStateAction } from '../store'
+import LobbyChat from './LobbyChat'
 
 const GameSettings = (props: { lobbyid: string }) => {
   const [state, dispatch] = useContext(AppContext)
@@ -18,6 +23,14 @@ const GameSettings = (props: { lobbyid: string }) => {
       payload: newSettings,
     })
     lobbyContext.clientController.updateSettings(newSettings)
+  }
+
+  const startGame = () => {
+    dispatch({
+      type: AppStateAction.SetLobbyStatus,
+      payload: LobbyStatus.InGame,
+    })
+    lobbyContext.clientController.startGame()
   }
   return (
     <>
@@ -47,7 +60,7 @@ const GameSettings = (props: { lobbyid: string }) => {
             state.lobby.players.filter((p) => p.ready).length !==
               state.lobby.players.length
           }
-          onClick={undefined}
+          onClick={startGame}
         >
           Start Game
         </button>
