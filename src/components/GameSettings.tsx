@@ -18,8 +18,8 @@ const GameSettings = (props: { lobbyid: string }) => {
       payload: newSettings,
     })
     lobbyContext.clientController.updateSettings(newSettings)
+    console.log(lobbyContext.clientController.allPlayersReady())
   }
-
   return (
     <>
       <h1> Game Settings</h1>
@@ -32,15 +32,32 @@ const GameSettings = (props: { lobbyid: string }) => {
           type="checkbox"
           onChange={(e) => updateSetting({ isPrivate: e.target.checked })}
           checked={state.lobby.settings.isPrivate}
+          disabled={
+            lobbyContext.clientController.pid !==
+            lobbyContext.clientController.owner
+          }
         />
         <div> Hide Bank Cards</div>
         <input
           type="checkbox"
           onChange={(e) => updateSetting({ hideBankCards: e.target.checked })}
           checked={state.lobby.settings.hideBankCards}
+          disabled={
+            lobbyContext.clientController.pid !==
+            lobbyContext.clientController.owner
+          }
         />
         <div>Game Speed</div>
-        {/* start game button shows only for p1 */}
+        <button
+          disabled={
+            lobbyContext.clientController.pid !==
+              lobbyContext.clientController.owner ||
+            !lobbyContext.clientController.allPlayersReady()
+          }
+          onClick={undefined}
+        >
+          Start Game
+        </button>
       </div>
     </>
   )
