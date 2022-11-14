@@ -11,6 +11,7 @@ interface AppState {
     settings: LobbySettings
     chat: ChatMessage[]
     players: { pid: string; name: string; ready: boolean }[]
+    owner?: string
   }
 }
 
@@ -73,16 +74,22 @@ const reducer = (
             ...state.lobby.players,
             { ...action.payload, ready: false },
           ],
+          owner: state.lobby.owner || action.payload.pid,
         },
       }
     case AppStateAction.RemovePlayer:
+      const newPlayers = state.lobby.players.filter(
+        ({ pid }) => pid !== (action.payload.pid as string),
+      )
       return {
         ...state,
         lobby: {
           ...state.lobby,
-          players: state.lobby.players.filter(
-            ({ pid }) => pid !== (action.payload.pid as string),
-          ),
+          players: newPlayers,
+          owner:
+            state.lobby.owner !== action.payload.pid
+              ? state.lobby.owner
+              : newPlayers[0]?.pid,
         },
       }
     case AppStateAction.SetReadyStatus:

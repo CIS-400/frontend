@@ -22,7 +22,7 @@ const PlayerList = () => {
       {state.lobby.players.map(({ name, pid, ready }) => (
         <div key={pid}>
           <div>
-            {name} {pid === lobbyContext.clientController.owner && '👑'}
+            {name} {pid === state.lobby.owner && '👑'}
           </div>
           <input
             type="checkbox"

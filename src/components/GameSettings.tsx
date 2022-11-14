@@ -18,7 +18,6 @@ const GameSettings = (props: { lobbyid: string }) => {
       payload: newSettings,
     })
     lobbyContext.clientController.updateSettings(newSettings)
-    console.log(lobbyContext.clientController.allPlayersReady())
   }
   return (
     <>
@@ -32,27 +31,21 @@ const GameSettings = (props: { lobbyid: string }) => {
           type="checkbox"
           onChange={(e) => updateSetting({ isPrivate: e.target.checked })}
           checked={state.lobby.settings.isPrivate}
-          disabled={
-            lobbyContext.clientController.pid !==
-            lobbyContext.clientController.owner
-          }
+          disabled={lobbyContext.clientController.pid !== state.lobby.owner}
         />
         <div> Hide Bank Cards</div>
         <input
           type="checkbox"
           onChange={(e) => updateSetting({ hideBankCards: e.target.checked })}
           checked={state.lobby.settings.hideBankCards}
-          disabled={
-            lobbyContext.clientController.pid !==
-            lobbyContext.clientController.owner
-          }
+          disabled={lobbyContext.clientController.pid !== state.lobby.owner}
         />
         <div>Game Speed</div>
         <button
           disabled={
-            lobbyContext.clientController.pid !==
-              lobbyContext.clientController.owner ||
-            !lobbyContext.clientController.allPlayersReady()
+            lobbyContext.clientController.pid !== state.lobby.owner ||
+            state.lobby.players.filter((p) => p.ready).length !==
+              state.lobby.players.length
           }
           onClick={undefined}
         >

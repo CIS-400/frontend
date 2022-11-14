@@ -7,8 +7,6 @@ import { LobbySettings } from '@backend/lobby'
 
 export default class ClientController {
   private socket: Socket<ServerToClientEvents, ClientToServerEvents> | undefined
-  public playerData: Record<string, { name: string; ready: boolean }> = {}
-  public owner: string | undefined
   public pid: string | undefined
   private serverEventListeners: Record<
     keyof ServerToClientEvents,
@@ -37,20 +35,6 @@ export default class ClientController {
         this.serverEventListeners[e].forEach((l) => l(data)),
       )
     })
-    this.socket.on('add-player', ({ pid, name, owner }) => {
-      this.owner = owner
-      this.playerData[pid] = {
-        name,
-        ready: false,
-      }
-    })
-    this.socket.on('remove-player', ({ pid, owner }) => {
-      delete this.playerData[pid]
-      this.owner = owner
-    })
-    this.socket.on('set-ready-status', ({ pid, ready }) => {
-      this.playerData[pid].ready = ready
-    })
   }
 
   public clearServerEventListeners() {
@@ -72,19 +56,11 @@ export default class ClientController {
   }
 
   public setReadyStatus(ready: boolean) {
-    this.playerData[this.pid!].ready = ready
     this.socket!.emit('set-ready-status', ready)
   }
 
   public updateSettings(settings: LobbySettings) {
     this.socket!.emit('update-settings', settings)
-  }
-
-  public allPlayersReady() {
-    return (
-      Object.values(this.playerData).filter((d) => d.ready).length ===
-      Object.keys(this.playerData).length
-    )
   }
 }
 
