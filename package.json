@@ -10,6 +10,7 @@
     "@types/node": "^16.11.59",
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
+    "cookie": "^0.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.1",
@@ -43,6 +44,7 @@
     ]
   },
   "devDependencies": {
+    "@types/cookie": "^0.5.1",
     "@types/uuid": "^8.3.4",
     "customize-cra": "^1.0.0",
     "react-app-rewired": "^2.2.1"

@@ -31,12 +31,13 @@ export default class Lobby extends React.Component<{}> {
     clientController.addServerEventListener('chat-message', (payload) =>
       dispatch({ type: AppStateAction.SendChatMessage, payload }),
     )
-    clientController.addServerEventListener('start-game', () =>
+    clientController.addServerEventListener('start-game', () => {
       dispatch({
         type: AppStateAction.SetLobbyStatus,
         payload: LobbyStatus.InGame,
-      }),
-    )
+      })
+      document.cookie = `allow-list-id=${lobbyContext.clientController.pid}`
+    })
   }
   render() {
     const [state, dispatch] = this.context

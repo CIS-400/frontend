@@ -4,6 +4,7 @@ import {
   ServerToClientEvents,
 } from '@backend/socket-server'
 import { LobbySettings } from '@backend/lobby'
+import { parse } from 'cookie'
 
 export default class ClientController {
   private socket?: Socket<ServerToClientEvents, ClientToServerEvents>
@@ -23,7 +24,12 @@ export default class ClientController {
 
   public initializeConnection(lid: string) {
     if (this.socket !== undefined) return
-    this.socket = io('http://localhost:8000/dev')
+    console.log('cookies', document.cookie)
+    this.socket = io('http://localhost:8000/dev', {
+      extraHeaders: {
+        'allow-list-id': parse(document.cookie)['allow-list-id'] ?? '',
+      },
+    })
     this.socket.once('connect', () => {
       this.pid = this.socket!.id
       this.socket!.emit('add-player', { name: randomName() })

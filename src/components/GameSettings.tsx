@@ -31,6 +31,7 @@ const GameSettings = (props: { lobbyid: string }) => {
       payload: LobbyStatus.InGame,
     })
     lobbyContext.clientController.startGame()
+    document.cookie = `allow-list-id=${lobbyContext.clientController.pid}`
   }
   return (
     <>
