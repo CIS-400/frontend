@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom'
 import GameSettings from '../components/GameSettings'
 import LobbyChat from '../components/LobbyChat'
 import PlayerList from '../components/PlayerList'
+import GameBoard from '../components/InGame/GameBoard'
 import lobbyContext from '../lobby-context'
 import { AppContext, AppStateAction } from '../store'
 
@@ -53,7 +54,15 @@ export default class Lobby extends React.Component<{}> {
           </>
         )
       case LobbyStatus.InGame:
-        return <div>i am in game</div>
+        return (
+          <>
+            <div>i am in game</div>
+            <GameBoard />
+            <hr />
+            {/* mention game history in chat? or as separate component? */}
+            <LobbyChat />
+          </>
+        )
       case LobbyStatus.PostGame:
         return <div>i am post game</div>
     }

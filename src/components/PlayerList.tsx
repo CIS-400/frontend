@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 import lobbyContext from '../lobby-context'
+import { LobbyStatus } from '../../../backend/src/lobby'
 import { AppContext, AppStateAction } from '../store'
 
 const PlayerList = () => {
@@ -24,12 +25,14 @@ const PlayerList = () => {
           <div>
             {name} {pid === state.lobby.owner && '👑'}
           </div>
-          <input
-            type="checkbox"
-            checked={ready}
-            disabled={pid !== lobbyContext.clientController.pid}
-            onChange={readyClicked}
-          />
+          {state.lobby.status === LobbyStatus.PreGame && (
+            <input
+              type="checkbox"
+              checked={ready}
+              disabled={pid !== lobbyContext.clientController.pid}
+              onChange={readyClicked}
+            />
+          )}
         </div>
       ))}
     </div>
