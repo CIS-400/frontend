@@ -59,7 +59,7 @@ export default class Lobby extends React.Component<{}> {
             <div>i am in game</div>
             <GameBoard />
             <hr />
-            {/* mention game history in chat? or as separate component? */}
+            {/* TODO mention game history in chat? or as separate component? */}
             <LobbyChat />
           </>
         )

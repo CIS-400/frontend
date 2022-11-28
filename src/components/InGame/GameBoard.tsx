@@ -6,7 +6,6 @@ export default class GameBoard extends React.Component<{}> {
     return (
       <>
         <h1> game board TO DO </h1>
-        <h2> Player List: </h2>
         <PlayerList />
       </>
     )
