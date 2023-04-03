@@ -22,10 +22,16 @@ export default class ClientController {
     'start-game': [],
   }
 
+  private lobby_url: string;
+
+  constructor(lobby_url: string) {
+    this.lobby_url = lobby_url;
+  }
+
   public initializeConnection(lid: string) {
     if (this.socket !== undefined) return
     console.log('cookies', document.cookie)
-    this.socket = io('http://localhost:8000/dev', {
+    this.socket = io(`http://localhost:8000/${this.lobby_url}`, {
       extraHeaders: {
         'allow-list-id': parse(document.cookie)['allow-list-id'] ?? '',
       },

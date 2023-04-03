@@ -1,10 +1,11 @@
-import React from 'react'
 import ClientController from './client-controller'
 
-const lobbyContext = {
-  clientController: new ClientController(),
-  gameState: null,
-  gameUI: null,
+function createLobbyContext(lobby_url: string) {
+  return {
+    clientController: new ClientController(lobby_url),
+    gameState: null,
+    gameUI: null,
+  }
 }
 
-export default lobbyContext
+export default createLobbyContext

@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
-import lobbyContext from '../lobby-context'
 import { AppContext, AppStateAction } from '../store'
 import ChatInput from './ChatInput'
+import ClientController from "../client-controller"
 
-const LobbyChat = () => {
+const LobbyChat = (props: { clientController: ClientController }) => {
   const [state, dispatch] = useContext(AppContext)
   return (
     <>
@@ -18,9 +18,9 @@ const LobbyChat = () => {
         onSend={(message) => {
           dispatch({
             type: AppStateAction.SendChatMessage,
-            payload: { pid: lobbyContext.clientController.pid, message },
+            payload: { pid: props.clientController.pid, message },
           })
-          lobbyContext.clientController.sendChatMessage(message)
+          props.clientController.sendChatMessage(message)
         }}
       />
     </>

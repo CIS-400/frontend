@@ -2,19 +2,20 @@ import React, { useContext, useEffect } from 'react'
 import lobbyContext from '../lobby-context'
 import { LobbyStatus } from '../../../backend/src/lobby'
 import { AppContext, AppStateAction } from '../store'
+import ClientController from '../client-controller'
 
-const PlayerList = () => {
+const PlayerList = (props: { clientController: ClientController }) => {
   const [state, dispatch] = useContext(AppContext)
 
   const readyClicked = (e: any) => {
     dispatch({
       type: AppStateAction.SetReadyStatus,
       payload: {
-        pid: lobbyContext.clientController.pid,
+        pid: props.clientController.pid,
         ready: e.target.checked,
       },
     })
-    lobbyContext.clientController.setReadyStatus(e.target.checked)
+    props.clientController.setReadyStatus(e.target.checked)
   }
 
   return (
@@ -29,7 +30,7 @@ const PlayerList = () => {
             <input
               type="checkbox"
               checked={ready}
-              disabled={pid !== lobbyContext.clientController.pid}
+              disabled={pid !== props.clientController.pid}
               onChange={readyClicked}
             />
           )}
