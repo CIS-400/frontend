@@ -1,7 +1,7 @@
 import React from 'react'
 import ClientController from './client-controller'
 import { Game } from 'settlers'
-import GameUI from 'settlers-ui'
+import { GameUI } from 'settlers-ui'
 
 const game = new Game()
 const lobbyContext = {

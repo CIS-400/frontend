@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import GameUI, { UIEvents } from 'settlers-ui'
+import { UIEvents } from 'settlers-ui'
 import * as SETTLERS from 'settlers'
 import PlayerList from '../PlayerList'
 import { AppContext } from 'src/store'
@@ -21,7 +21,8 @@ export default class GameBoard extends React.Component<{}> {
         clientController.sendAction(action)
       })
     }
-    gameUI.setResizeTo(this.gameBoardRef.current)
+    console.log(gameUI)
+    gameUI.setResizeTo(this.gameBoardRef.current!)
     clientController.addServerEventListener(
       'get-action',
       (action: SETTLERS.Action) => {
