@@ -5,6 +5,7 @@ import {
 } from '@backend/socket-server'
 import { LobbySettings } from '@backend/lobby'
 import { parse } from 'cookie'
+import * as SETTLERS from 'settlers'
 
 export default class ClientController {
   private socket?: Socket<ServerToClientEvents, ClientToServerEvents>
@@ -20,6 +21,7 @@ export default class ClientController {
     'remove-player': [],
     'lobby-is-full': [],
     'start-game': [],
+    'get-action': [],
   }
 
   public initializeConnection(lid: string) {
@@ -68,6 +70,10 @@ export default class ClientController {
 
   public updateSettings(settings: LobbySettings) {
     this.socket!.emit('update-settings', settings)
+  }
+
+  public sendAction(action: SETTLERS.Action) {
+    this.socket!.emit('action', action)
   }
 
   public startGame() {
