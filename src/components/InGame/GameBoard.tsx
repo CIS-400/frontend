@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { UIEvents } from '../../game-ui/game-ui'
+import GameUI, { UIEvents } from '../../game-ui/game-ui'
 import * as SETTLERS from 'settlers'
 import PlayerList from '../PlayerList'
 import { AppContext } from 'src/store'
@@ -15,23 +15,35 @@ export default class GameBoard extends React.Component<{}> {
   }
   componentDidMount() {
     const [state, dispatch] = this.context
+
     const { gameState, gameUI, clientController } = lobbyContext
+    console.log('mount gameState', gameState)
     for (const uievent of Object.values(UIEvents)) {
       gameUI.addEventHandler(uievent as UIEvents, (action: SETTLERS.Action) => {
         clientController.sendAction(action)
       })
     }
+    // set game board UI
     console.log(gameUI)
     gameUI.setResizeTo(this.gameBoardRef.current as HTMLElement)
     gameUI.initialize();
     this.gameBoardRef.current!.appendChild(gameUI.getUI() as unknown as Node)
     this.forceUpdate()
 
+    // set number
+    gameUI.setPerspective(clientController.number!)
+    console.log('CC NUMBER:', clientController.number!)
+    clientController.clearServerEventListener('get-action')
     clientController.addServerEventListener(
       'get-action',
       (action: SETTLERS.Action) => {
+        console.log('before gamestate', gameState)
+        console.log('action', action)
         gameState.handleAction(action)
         gameUI.update()
+        this.forceUpdate()
+        console.log(action)
+        console.log('after gamestate', gameState)
       },
     )
   }

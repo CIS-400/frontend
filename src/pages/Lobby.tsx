@@ -17,9 +17,11 @@ export default class Lobby extends React.Component<{}> {
     const { clientController } = lobbyContext
     clientController.initializeConnection('dev')
     clientController.clearServerEventListeners()
-    clientController.addServerEventListener('add-player', (payload) =>
-      dispatch({ type: AppStateAction.AddPlayer, payload }),
-    )
+    clientController.addServerEventListener('add-player', (payload) => {
+      if (clientController.pid === payload.pid)
+        clientController.number = payload.number
+      dispatch({ type: AppStateAction.AddPlayer, payload })
+    })
     clientController.addServerEventListener('remove-player', (payload) =>
       dispatch({ type: AppStateAction.RemovePlayer, payload }),
     )

@@ -61,7 +61,7 @@ class GameUI {
       this.eventHandlers[event as UIEvents] = [];
     }
     this.perspective = game.getTurn();
-    this.followTurnPerspective = true;
+    this.followTurnPerspective = false;
     this.app = new PIXI.Application({
       backgroundColor: "#78bac2",
     });
@@ -74,8 +74,6 @@ class GameUI {
 
   initialize() {
     const { width, height } = this.app.view;
-    // const width = 2000;
-    // const height = 800;
 
     // VERY IMPORTANT! used for scaling, change scale scale factor to test
     const SCALE_FACTOR = 1;

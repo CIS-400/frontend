@@ -10,6 +10,7 @@ import * as SETTLERS from 'settlers'
 export default class ClientController {
   private socket?: Socket<ServerToClientEvents, ClientToServerEvents>
   public pid?: string
+  public number?: number
   private serverEventListeners: Record<
     keyof ServerToClientEvents,
     ((...args: any[]) => void)[]
@@ -51,6 +52,9 @@ export default class ClientController {
       this.serverEventListeners,
     ) as (keyof ServerToClientEvents)[]
     events.forEach((e) => (this.serverEventListeners[e] = []))
+  }
+  public clearServerEventListener(event: keyof ServerToClientEvents) {
+    this.serverEventListeners[event] = []
   }
 
   public addServerEventListener(
