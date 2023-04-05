@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { UIEvents } from 'settlers-ui'
+import { UIEvents } from '../../game-ui/game-ui'
 import * as SETTLERS from 'settlers'
 import PlayerList from '../PlayerList'
 import { AppContext } from 'src/store'
@@ -22,7 +22,11 @@ export default class GameBoard extends React.Component<{}> {
       })
     }
     console.log(gameUI)
-    gameUI.setResizeTo(this.gameBoardRef.current!)
+    gameUI.setResizeTo(this.gameBoardRef.current as HTMLElement)
+    gameUI.initialize();
+    this.gameBoardRef.current!.appendChild(gameUI.getUI() as unknown as Node)
+    this.forceUpdate()
+
     clientController.addServerEventListener(
       'get-action',
       (action: SETTLERS.Action) => {
@@ -36,7 +40,7 @@ export default class GameBoard extends React.Component<{}> {
       <>
         <div
           id="game-board"
-          style={{ width: '600px', height: '600px' }}
+          style={{ width: "1000px", height: "800px" }}
           ref={this.gameBoardRef as React.RefObject<HTMLDivElement>}
         />
         <h2> Player List: </h2>

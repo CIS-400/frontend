@@ -118,7 +118,7 @@ const GameSettings = (props: { lobbyid: string }) => {
         <CheckboxLabel>Private Game</CheckboxLabel>
           <CheckboxInput
             type="checkbox"
-            onChange={(e) => updateSetting({ isPrivate: e.target.checked })}
+            onChange={(e: any) => updateSetting({ isPrivate: e.target.checked })}
             checked={state.lobby.settings.isPrivate}
             disabled={lobbyContext.clientController.pid !== state.lobby.owner}
           />
@@ -128,7 +128,7 @@ const GameSettings = (props: { lobbyid: string }) => {
           <CheckboxLabel>Hide Bank Cards</CheckboxLabel>
           <CheckboxInput
             type="checkbox"
-            onChange={(e) => updateSetting({ hideBankCards: e.target.checked })}
+            onChange={(e: any) => updateSetting({ hideBankCards: e.target.checked })}
             checked={state.lobby.settings.hideBankCards}
             disabled={lobbyContext.clientController.pid !== state.lobby.owner}
           />
