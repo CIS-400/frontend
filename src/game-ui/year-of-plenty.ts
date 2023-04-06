@@ -146,7 +146,8 @@ class YearPlenty extends PIXI.Container implements Updatable {
     // check if in choosing resources YoP state
     if (
       this.gameui.game.getTurnState() !==
-      SETTLERS.TurnState.SelectingYearOfPlentyResources
+      SETTLERS.TurnState.SelectingYearOfPlentyResources  ||
+      this.gameui.getPerspective() !== this.gameui.game.getTurn()
     ) {
       return;
     }
