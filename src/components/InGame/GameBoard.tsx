@@ -44,7 +44,6 @@ export default class GameBoard extends React.Component<{}> {
     gameState.handleAction(action)
     gameUI.update()
     this.forceUpdate()
-    console.log(action)
     console.log('after gamestate', gameState.toLog())
   }
   render() {

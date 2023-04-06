@@ -134,7 +134,7 @@ class GameUI {
   }
 
   update() {
-    console.log('the gameui says the game state is', this.game.toLog())
+    //console.log('the gameui says the game state is', this.game.toLog())
     if (this.followTurnPerspective) {
       this.perspective = this.game.getTurn()
     }
