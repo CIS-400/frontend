@@ -58,7 +58,6 @@ export default class Lobby extends React.Component<{}> {
       case LobbyStatus.InGame:
         return (
           <>
-            <div>i am in game</div>
             <GameBoard />
             <hr />
             {/* TODO mention game history in chat? or as separate component? */}

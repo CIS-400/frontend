@@ -12,6 +12,7 @@ export default class GameBoard extends React.Component<{}> {
   constructor(props: {} | Readonly<{}>) {
     super(props)
     this.gameBoardRef = React.createRef()
+    this.handleGetAction = this.handleGetAction.bind(this)
   }
   componentDidMount() {
     const [state, dispatch] = this.context
@@ -26,33 +27,32 @@ export default class GameBoard extends React.Component<{}> {
     // set game board UI
     console.log(gameUI)
     gameUI.setResizeTo(this.gameBoardRef.current as HTMLElement)
-    gameUI.initialize();
+    gameUI.initialize()
     this.gameBoardRef.current!.appendChild(gameUI.getUI() as unknown as Node)
     this.forceUpdate()
 
     // set number
     gameUI.setPerspective(clientController.number!)
-    console.log('CC NUMBER:', clientController.number!)
     clientController.clearServerEventListener('get-action')
-    clientController.addServerEventListener(
-      'get-action',
-      (action: SETTLERS.Action) => {
-        console.log('before gamestate', gameState)
-        console.log('action', action)
-        gameState.handleAction(action)
-        gameUI.update()
-        this.forceUpdate()
-        console.log(action)
-        console.log('after gamestate', gameState)
-      },
-    )
+    clientController.addServerEventListener('get-action', this.handleGetAction)
+  }
+
+  handleGetAction(action: SETTLERS.Action) {
+    const { gameState, gameUI } = lobbyContext
+    console.log('before gamestate', gameState.toLog())
+    console.log('action', action)
+    gameState.handleAction(action)
+    gameUI.update()
+    this.forceUpdate()
+    console.log(action)
+    console.log('after gamestate', gameState.toLog())
   }
   render() {
     return (
       <>
         <div
           id="game-board"
-          style={{ width: "1000px", height: "800px" }}
+          style={{ width: '1000px', height: '800px' }}
           ref={this.gameBoardRef as React.RefObject<HTMLDivElement>}
         />
         <h2> Player List: </h2>
