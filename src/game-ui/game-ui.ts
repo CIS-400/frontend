@@ -146,6 +146,7 @@ class GameUI {
     this.inventory.update()
     this.discard.update()
     this.tradeOffers.update()
+    this.tradeOfferStagingArea.update()
 
     // dev cards + robber
     this.yearPlenty.update()
