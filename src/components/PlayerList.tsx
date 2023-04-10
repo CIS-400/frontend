@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import lobbyContext from '../lobby-context'
 import { LobbyStatus } from '../../../backend/src/lobby'
 import { AppContext, AppStateAction } from '../store'
+import ClientController from 'src/client-controller'
 
 const PlayerList = () => {
   const [state, dispatch] = useContext(AppContext)
@@ -25,29 +26,35 @@ const PlayerList = () => {
   return (
     <div>
       <h1>Player List</h1>
-      {state.lobby.players.map(({ name, pid, ready }, index) => (
+      {state.lobby.players.map(({ name, pid, ready, number }) => (
         <div key={pid}>
-          <span
-            style={{
-              color: colors[index],
-              fontWeight:
-                lobbyContext.gameUI?.getPerspective() === index
-                  ? 'bold'
-                  : 'normal',
-            }}
-          >
-            {name} {pid === state.lobby.owner && '👑'}
-          </span>
-          {/* <span style={{ fontWeight: 'bold', color: 'red' }}>
-            {name} {pid === state.lobby.owner && '👑'}
-          </span> */}
+          {state.lobby.status === LobbyStatus.InGame && (
+            <span
+              style={{
+                color: colors[number],
+                fontWeight:
+                  number === lobbyContext.clientController.number
+                    ? 'bold'
+                    : 'normal',
+              }}
+            >
+              {name} {pid === state.lobby.owner && '👑'}
+            </span>
+          )}
+
           {state.lobby.status === LobbyStatus.PreGame && (
-            <input
-              type="checkbox"
-              checked={ready}
-              disabled={pid !== lobbyContext.clientController.pid}
-              onChange={readyClicked}
-            />
+            <>
+              <div>
+                {' '}
+                {name} {pid === state.lobby.owner && '👑'}{' '}
+              </div>
+              <input
+                type="checkbox"
+                checked={ready}
+                disabled={pid !== lobbyContext.clientController.pid}
+                onChange={readyClicked}
+              />
+            </>
           )}
         </div>
       ))}

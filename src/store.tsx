@@ -10,7 +10,7 @@ interface AppState {
   lobby: {
     settings: LobbySettings
     chat: ChatMessage[]
-    players: { pid: string; name: string; ready: boolean }[]
+    players: { pid: string; name: string; ready: boolean; number: number }[]
     owner?: string
     status: LobbyStatus
   }

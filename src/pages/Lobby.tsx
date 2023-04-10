@@ -75,6 +75,7 @@ export default class Lobby extends React.Component<{}> {
                 }}
               >
                 <PlayerList />
+
                 <div style={{ flex: 1 }}></div>
                 <div style={{ marginTop: 'auto' }}>
                   <LobbyChat />
