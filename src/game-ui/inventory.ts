@@ -26,7 +26,7 @@ class Inventory extends PIXI.Container implements Updatable {
     const game = gameui.game;
     let x: number, card: PIXI.Sprite, text: PIXI.Text;
     for (let i = 0; i < CARD_TYPES; i++) {
-      x = (i * width) / CARD_TYPES;
+      x = (i * width)*0.97 / CARD_TYPES;
       if (i < SETTLERS.NUM_RESOURCE_TYPES) {
         card = new PIXI.Sprite(
           gameui.textures[`${SETTLERS.resStr(i as SETTLERS.Resource)}_card`]
@@ -96,7 +96,7 @@ class Inventory extends PIXI.Container implements Updatable {
         );
       }
       card!.position.set(x, height / 5);
-      card!.scale.set(0.3);
+      card!.scale.set(0.35);
       text.anchor.set(0.5, 0);
       text!.position.set(x + card!.width / 2, height / 5 + card!.height);
       this.cardCountText.push(text!);

@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import GameUI, { UIEvents } from '../../game-ui/game-ui'
 import * as SETTLERS from 'settlers'
-import PlayerList from '../PlayerList'
 import { AppContext } from 'src/store'
 import lobbyContext from 'src/lobby-context'
 
@@ -54,8 +53,6 @@ export default class GameBoard extends React.Component<{}> {
           style={{ width: '1000px', height: '800px' }}
           ref={this.gameBoardRef as React.RefObject<HTMLDivElement>}
         />
-        <h2> Player List: </h2>
-        <PlayerList />
       </>
     )
   }

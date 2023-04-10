@@ -63,10 +63,25 @@ export default class Lobby extends React.Component<{}> {
       case LobbyStatus.InGame:
         return (
           <>
-            <GameBoard />
-            <hr />
-            {/* TODO mention game history in chat? or as separate component? */}
-            <LobbyChat />
+            <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+              <GameBoard />
+
+              <div
+                style={{
+                  width: '30%',
+                  marginLeft: '1%',
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}
+              >
+                <PlayerList />
+                <div style={{ flex: 1 }}></div>
+                <div style={{ marginTop: 'auto' }}>
+                  <LobbyChat />
+                </div>
+              </div>
+
+            </div>
           </>
         )
       case LobbyStatus.PostGame:
