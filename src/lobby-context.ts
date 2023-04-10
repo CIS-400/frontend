@@ -3,14 +3,14 @@ import ClientController from './client-controller'
 import { Game } from 'settlers'
 import GameUI from './game-ui/game-ui'
 
-const seedrandom = require('seedrandom')
-
-seedrandom('dev', { global: true })
-const game = new Game()
-const lobbyContext = {
+const lobbyContext: {
+  clientController: ClientController
+  gameState: Game | null
+  gameUI: GameUI | null
+} = {
   clientController: new ClientController(),
-  gameState: game,
-  gameUI: new GameUI(game),
+  gameState: null,
+  gameUI: null,
 }
 
 export default lobbyContext

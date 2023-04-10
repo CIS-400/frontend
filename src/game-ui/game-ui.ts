@@ -66,12 +66,12 @@ class GameUI {
       backgroundColor: '#78bac2',
     })
     this.initialize = this.initialize.bind(this)
-    this.loadTextures().then((textures) => {
-      this.textures = textures
-    })
   }
 
-  initialize() {
+  async initialize() {
+    await this.loadTextures().then((textures) => {
+      this.textures = textures
+    })
     const { width, height } = this.app.view
 
     // VERY IMPORTANT! used for scaling, change scale scale factor to test

@@ -14,9 +14,9 @@ export default class GameBoard extends React.Component<{}> {
     this.gameBoardRef = React.createRef()
     this.handleGetAction = this.handleGetAction.bind(this)
   }
-  componentDidMount() {
-    const [state, dispatch] = this.context
-
+  async componentDidMount() {
+    lobbyContext.gameState = new SETTLERS.Game()
+    lobbyContext.gameUI = new GameUI(lobbyContext.gameState)
     const { gameState, gameUI, clientController } = lobbyContext
     console.log('mount gameState', gameState)
     for (const uievent of Object.values(UIEvents)) {
@@ -27,7 +27,7 @@ export default class GameBoard extends React.Component<{}> {
     // set game board UI
     console.log(gameUI)
     gameUI.setResizeTo(this.gameBoardRef.current as HTMLElement)
-    gameUI.initialize()
+    await gameUI.initialize()
     this.gameBoardRef.current!.appendChild(gameUI.getUI() as unknown as Node)
     this.forceUpdate()
 
@@ -39,12 +39,12 @@ export default class GameBoard extends React.Component<{}> {
 
   handleGetAction(action: SETTLERS.Action) {
     const { gameState, gameUI } = lobbyContext
-    console.log('before gamestate', gameState.toLog())
+    console.log('before gamestate', gameState!.toLog())
     console.log('action', action)
-    gameState.handleAction(action)
-    gameUI.update()
+    gameState!.handleAction(action)
+    gameUI!.update()
     this.forceUpdate()
-    console.log('after gamestate', gameState.toLog())
+    console.log('after gamestate', gameState!.toLog())
   }
   render() {
     return (

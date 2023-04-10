@@ -8,6 +8,7 @@ import PlayerList from '../components/PlayerList'
 import GameBoard from '../components/InGame/GameBoard'
 import lobbyContext from '../lobby-context'
 import { AppContext, AppStateAction } from '../store'
+const seedrandom = require('seedrandom')
 
 export default class Lobby extends React.Component<{}> {
   static contextType = AppContext
@@ -17,6 +18,10 @@ export default class Lobby extends React.Component<{}> {
     const { clientController } = lobbyContext
     clientController.initializeConnection('dev')
     clientController.clearServerEventListeners()
+    clientController.addServerEventListener('set-seed', (seed) => {
+      console.log('setting seed to', seed)
+      seedrandom(seed, { global: true })
+    })
     clientController.addServerEventListener('add-player', (payload) => {
       if (clientController.pid === payload.pid)
         clientController.number = payload.number

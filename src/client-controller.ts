@@ -23,6 +23,7 @@ export default class ClientController {
     'lobby-is-full': [],
     'start-game': [],
     'get-action': [],
+    'set-seed': [],
   }
 
   public initializeConnection(lid: string) {
