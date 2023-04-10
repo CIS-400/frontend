@@ -30,7 +30,7 @@ class EndTurn extends PIXI.Sprite implements Updatable {
   update() {
     this.alpha = this.gameui.game.isValidAction(this.getPotentialAction()).valid
       ? 1.0
-      : 0.75;
+      : 0.25;
   }
 
   private getPotentialAction() {

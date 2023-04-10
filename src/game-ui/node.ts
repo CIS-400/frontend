@@ -18,7 +18,7 @@ class Node extends PIXI.Container implements Updatable {
     this.sprite = new PIXI.Sprite();
     this.sprite.anchor.set(0.5, 0.75);
     this.sprite.position.set(0);
-    this.sprite.scale.set(0.4);
+    this.sprite.scale.set(0.2);
     this.addChild(this.sprite);
     this.hitArea = new PIXI.Circle(0, 0, width * 0.015);
     this.interactive = true;

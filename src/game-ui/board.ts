@@ -99,10 +99,9 @@ class Board extends PIXI.Container implements Updatable {
     }
 
     const backdrop = new PIXI.Sprite(gameui.textures["backdrop"]);
-    backdrop.scale.set(0.21);
+    backdrop.scale.set(0.25);
     backdrop.anchor.set(0.5);
     backdrop.position.set(0.5 * width);
-    // backdrop.angle = 180;
 
     this.addChild(backdrop, ...this.tiles, ...this.edges, ...this.nodes);
   }
