@@ -27,7 +27,7 @@ const Lobbies = () => {
             if (data.Items) {
               data.Items.forEach((item) => {
                 if (item['data-string'].S) {
-                  const JSONData = JSON.parse(JSON.parse(item['data-string'].S));
+                  const JSONData = JSON.parse(item['data-string'].S);
                   lobbies.push(JSONData.id);
                 }
               });
@@ -55,7 +55,7 @@ const Lobbies = () => {
     // Define the DynamoDB item
     const item = {
       'lobby-id': { S: newHash },
-      'data-string': { S: JSON.stringify(newLobbyJSON) },
+      'data-string': { S: newLobbyJSON },
     };
   
     // Define the parameters for the putItem method
