@@ -5,10 +5,12 @@ import {
 } from '@backend/socket-server'
 import { LobbySettings } from '@backend/lobby'
 import { parse } from 'cookie'
+import * as SETTLERS from 'settlers'
 
 export default class ClientController {
   private socket?: Socket<ServerToClientEvents, ClientToServerEvents>
   public pid?: string
+  public number?: number
   private serverEventListeners: Record<
     keyof ServerToClientEvents,
     ((...args: any[]) => void)[]
@@ -20,18 +22,14 @@ export default class ClientController {
     'remove-player': [],
     'lobby-is-full': [],
     'start-game': [],
-  }
-
-  private lobby_url: string;
-
-  constructor(lobby_url: string) {
-    this.lobby_url = lobby_url;
+    'get-action': [],
+    'set-seed': [],
   }
 
   public initializeConnection(lid: string) {
     if (this.socket !== undefined) return
     console.log('cookies', document.cookie)
-    this.socket = io(`http://localhost:8000/${this.lobby_url}`, {
+    this.socket = io(`http://localhost:8000/${lid}`, {
       extraHeaders: {
         'allow-list-id': parse(document.cookie)['allow-list-id'] ?? '',
       },
@@ -56,6 +54,9 @@ export default class ClientController {
     ) as (keyof ServerToClientEvents)[]
     events.forEach((e) => (this.serverEventListeners[e] = []))
   }
+  public clearServerEventListener(event: keyof ServerToClientEvents) {
+    this.serverEventListeners[event] = []
+  }
 
   public addServerEventListener(
     event: keyof ServerToClientEvents,
@@ -74,6 +75,10 @@ export default class ClientController {
 
   public updateSettings(settings: LobbySettings) {
     this.socket!.emit('update-settings', settings)
+  }
+
+  public sendAction(action: SETTLERS.Action) {
+    this.socket!.emit('action', action)
   }
 
   public startGame() {

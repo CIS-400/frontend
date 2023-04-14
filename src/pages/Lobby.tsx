@@ -6,8 +6,9 @@ import GameSettings from '../components/GameSettings'
 import LobbyChat from '../components/LobbyChat'
 import PlayerList from '../components/PlayerList'
 import GameBoard from '../components/InGame/GameBoard'
-import createLobbyContext from '../lobby-context'
+import lobbyContext from '../lobby-context'
 import { AppContext, AppStateAction } from '../store'
+const seedrandom = require('seedrandom')
 
 type LobbyProps = {
   lobby_url: string
@@ -24,21 +25,25 @@ export default class Lobby extends React.Component<LobbyProps, LobbyState> {
 
   constructor(props: LobbyProps) {
     super(props)
-    this.state = {
-      clientController: createLobbyContext(props.lobby_url)
-    }
   }
 
   componentDidMount(): void {
     const [state, dispatch] = this.context
-    const { clientController } = this.state.clientController
+
+    const { clientController } = lobbyContext
 
     clientController.initializeConnection(this.props.lobby_url)
     clientController.clearServerEventListeners()
-    clientController.addServerEventListener('add-player', (payload: any) =>
-      dispatch({ type: AppStateAction.AddPlayer, payload }),
-    )
-    clientController.addServerEventListener('remove-player', (payload: any) =>
+    clientController.addServerEventListener('set-seed', (seed) => {
+      console.log('setting seed to', seed)
+      seedrandom(seed, { global: true })
+    })
+    clientController.addServerEventListener('add-player', (payload) => {
+      if (lobbyContext.clientController.pid === payload.pid)
+      lobbyContext.clientController.number = payload.number
+      dispatch({ type: AppStateAction.AddPlayer, payload })
+    })
+    clientController.addServerEventListener('remove-player', (payload) =>
       dispatch({ type: AppStateAction.RemovePlayer, payload }),
     )
     clientController.addServerEventListener('set-ready-status', (payload: any) =>
@@ -61,7 +66,6 @@ export default class Lobby extends React.Component<LobbyProps, LobbyState> {
 
   render() {
     const [state, dispatch] = this.context
-    const { clientController } = this.state.clientController
 
     switch (state.lobby.status) {
       case LobbyStatus.PreGame:
@@ -69,22 +73,36 @@ export default class Lobby extends React.Component<LobbyProps, LobbyState> {
           <>
             <GameSettings
               lobbyid={this.props.lobby_url}
-              clientController={clientController}
             />
             <hr />
-            <LobbyChat clientController={clientController} />
+            <LobbyChat />
             <hr />
-            <PlayerList clientController={clientController} />  
+            <PlayerList />  
           </>
         )
       case LobbyStatus.InGame:
         return (
           <>
-            <div>i am in game</div>
-            <GameBoard clientController={clientController} />
-            <hr />
-            {/* TODO mention game history in chat? or as separate component? */}
-            <LobbyChat clientController={clientController} />
+            <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+              <GameBoard />
+
+              <div
+                style={{
+                  width: '30%',
+                  marginLeft: '1%',
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}
+              >
+                <PlayerList />
+
+                <div style={{ flex: 1 }}></div>
+                <div style={{ marginTop: 'auto' }}>
+                  <LobbyChat />
+                </div>
+              </div>
+
+            </div>
           </>
         )
       case LobbyStatus.PostGame:

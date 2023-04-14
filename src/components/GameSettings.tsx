@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import styled from 'styled-components'
 
 import {
   LobbySettings,
@@ -9,11 +10,79 @@ import Lobby from '../pages/Lobby'
 import { AppContext, AppStateAction } from '../store'
 import LobbyChat from './LobbyChat'
 import ClientController from "../client-controller"
+import lobbyContext from 'src/lobby-context'
 
-const GameSettings = (props: { lobbyid: string, clientController: ClientController }) => {
+const GameSettingsContainer = styled.div`
+  margin-left: 20px;
+`;
+
+const Title = styled.h1`
+  font-size: 24px;
+  font-weight: bold;
+  margin-left: 20px;
+`;
+
+const InviteWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const InviteCode = styled.div`
+  font-size: 18px;
+  //flex: 1;
+`;
+
+const CopyButton = styled.button`
+  margin-left: 8px;
+`;
+
+const CheckboxWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const CheckboxLabel = styled.label`
+  font-size: 18px;
+  margin-top: 5px;
+  margin-right: 8px;
+`;
+
+const CheckboxInput = styled.input`
+  margin-top: 10.5px;
+  margin-right: 8px;
+  display: inline-block;
+  vertical-align: middle;
+`;
+
+const StartGameButton = styled.button`
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  margin-top: 10px;
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+  &:not(:disabled):hover {
+    background-color: #0069d9;
+  }
+`;
+
+const GameSettings = (props: { lobbyid: string }) => {
+  const { gameState, gameUI, clientController } = lobbyContext
   const [state, dispatch] = useContext(AppContext)
 
-  const clientController = props.clientController;
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(props.lobbyid);
+  };
 
   const updateSetting = (setting: Partial<LobbySettings>) => {
     const newSettings = {
@@ -35,29 +104,40 @@ const GameSettings = (props: { lobbyid: string, clientController: ClientControll
     clientController.startGame()
     document.cookie = `allow-list-id=${clientController.pid}`
   }
+  
   return (
     <>
-      <h1> Game Settings</h1>
-      <div>
-        <div> Invite friends with this code: {props.lobbyid} </div>
+      <Title> Game Settings</Title>
+      <GameSettingsContainer>
+      <InviteWrapper>
+          <InviteCode>Invite friends with this code: {props.lobbyid}</InviteCode>
+          <CopyButton onClick={copyToClipboard}>Copy</CopyButton>
+        </InviteWrapper>
         {/* TODO: have input be placeholder for url, readonly and copy to clipboard */}
         {/* <input type="text" /> */}
-        <div> Private Game </div>
-        <input
-          type="checkbox"
-          onChange={(e) => updateSetting({ isPrivate: e.target.checked })}
-          checked={state.lobby.settings.isPrivate}
-          disabled={clientController.pid !== state.lobby.owner}
-        />
-        <div> Hide Bank Cards</div>
-        <input
-          type="checkbox"
-          onChange={(e) => updateSetting({ hideBankCards: e.target.checked })}
-          checked={state.lobby.settings.hideBankCards}
-          disabled={clientController.pid !== state.lobby.owner}
-        />
-        <div>Game Speed</div>
-        <button
+
+        <CheckboxWrapper>
+        <CheckboxLabel>Private Game</CheckboxLabel>
+          <CheckboxInput
+            type="checkbox"
+            onChange={(e: any) => updateSetting({ isPrivate: e.target.checked })}
+            checked={state.lobby.settings.isPrivate}
+            disabled={lobbyContext.clientController.pid !== state.lobby.owner}
+          />
+        </CheckboxWrapper>
+
+        <CheckboxWrapper>
+          <CheckboxLabel>Hide Bank Cards</CheckboxLabel>
+          <CheckboxInput
+            type="checkbox"
+            onChange={(e: any) => updateSetting({ hideBankCards: e.target.checked })}
+            checked={state.lobby.settings.hideBankCards}
+            disabled={lobbyContext.clientController.pid !== state.lobby.owner}
+          />
+        </CheckboxWrapper>
+        
+        {/* <div>Game Speed</div>  */}
+        <StartGameButton
           disabled={
             clientController.pid !== state.lobby.owner ||
             state.lobby.players.filter((p) => p.ready).length !==
@@ -65,9 +145,9 @@ const GameSettings = (props: { lobbyid: string, clientController: ClientControll
           }
           onClick={startGame}
         >
-          Start Game
-        </button>
-      </div>
+          Start Game!
+        </StartGameButton>
+      </GameSettingsContainer>
     </>
   )
 }
