@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AWS from 'aws-sdk';
+import './Lobbies.css';
 
 AWS.config.update({
   accessKeyId: 'AKIAWHYW7CNQRSY256YQ',
@@ -12,23 +13,29 @@ const params = {
   TableName: 'settlers-lobbies',
 };
 
+interface Lobby {
+  id: string;
+  players: string[];
+}
+
 const Lobbies = () => {
-  const [lobbies, setLobbies] = useState<string[]>([]);
+  const [lobbies, setLobbies] = useState<Lobby[]>([]);
 
   useEffect(() => {
-    const retrieveLobbies = (): Promise<string[]> => {
+    const retrieveLobbies = (): Promise<Lobby[]> => {
       return new Promise((resolve, reject) => {
         dynamoDB.scan(params, (err, data) => {
           if (err) {
             console.error('Error retrieving items from DynamoDB:', err);
             reject(err);
           } else {
-            const lobbies: string[] = [];
+            const lobbies: Lobby[] = [];
             if (data.Items) {
               data.Items.forEach((item) => {
                 if (item['data-string'].S) {
                   const JSONData = JSON.parse(item['data-string'].S);
-                  lobbies.push(JSONData.id);
+                  lobbies.push({ id: JSONData.id, players: Object.values(JSONData.playerData).map((player: any) => player.name) });
+                  console.log(JSONData.playerData);
                 }
               });
             }
@@ -94,17 +101,30 @@ const Lobbies = () => {
   };
 
   return (
-    <>
-      <h1>Lobbies</h1>
-      <div>
-        <button onClick={createLobby}>Create new lobby</button>
+    <div className="lobbies-container">
+      <h1 className="lobbies-title"> Lobbies </h1>
+      <div className="lobbies-id-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Lobby ID</th>
+              <th>Players</th>
+            </tr>
+          </thead>
+          <tbody>
+            {lobbies.map((lobby) => (
+              <tr key={lobby.id}>
+                <td><a href={`/${lobby.id}`}>{lobby.id}</a></td>
+                <td>{lobby.players.join(', ')}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <button type="button" className="btn lobby-button" onClick={createLobby}>
+          Create new lobby
+        </button>
       </div>
-      {lobbies.map((lobby) => (
-        <div key={lobby}>
-          <a href={`/${lobby}`}>{lobby}</a>
-        </div>
-      ))}
-    </>
+    </div>
   );
 };
 
