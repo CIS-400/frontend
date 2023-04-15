@@ -5,7 +5,6 @@ import {
 } from '@backend/socket-server'
 import { LobbySettings } from '@backend/lobby'
 import { parse } from 'cookie'
-import * as SETTLERS from 'settlers'
 
 export default class ClientController {
   private socket?: Socket<ServerToClientEvents, ClientToServerEvents>
@@ -77,7 +76,7 @@ export default class ClientController {
     this.socket!.emit('update-settings', settings)
   }
 
-  public sendAction(action: SETTLERS.Action) {
+  public sendAction(action: string) {
     this.socket!.emit('action', action)
   }
 

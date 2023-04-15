@@ -20,7 +20,7 @@ export default class GameBoard extends React.Component<{}> {
     console.log('mount gameState', gameState)
     for (const uievent of Object.values(UIEvents)) {
       gameUI.addEventHandler(uievent as UIEvents, (action: SETTLERS.Action) => {
-        clientController.sendAction(action)
+        clientController.sendAction(action.serialized())
       })
     }
     // set game board UI
@@ -36,14 +36,20 @@ export default class GameBoard extends React.Component<{}> {
     clientController.addServerEventListener('get-action', this.handleGetAction)
   }
 
-  handleGetAction(action: SETTLERS.Action) {
+  async handleGetAction(actionSerialied: string) {
     const { gameState, gameUI } = lobbyContext
-    console.log('before gamestate', gameState!.toLog())
-    console.log('action', action)
+    //await console.log('before gamestate\n', gameState!.toLog())
+    await console.log('action', actionSerialied)
+    const action: SETTLERS.Action = SETTLERS.Action.deserialize(actionSerialied)
+    await console.log('action deserialized', action)
+    await console.log(
+      'is the action valid?',
+      gameState!.isValidAction(action).valid,
+    )
     gameState!.handleAction(action)
     gameUI!.update()
     this.forceUpdate()
-    console.log('after gamestate', gameState!.toLog())
+    //await console.log('after gamestate\n', gameState!.toLog())
   }
   render() {
     return (

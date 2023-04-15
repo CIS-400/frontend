@@ -153,6 +153,7 @@ class TradeOfferStagingArea extends PIXI.Container implements Updatable {
     )
     if (game.isValidAction(action).valid) {
       game.handleAction(action)
+      console.log('serialized action', action.serialized())
       this.gameui.runEventHandlers(UIEvents.MakeTradeOffer, action)
       this.reset()
       this.gameui.update()
