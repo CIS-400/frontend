@@ -55,7 +55,7 @@ class YearPlenty extends PIXI.Container implements Updatable {
           // YEAR of Plenty needs 2 resources
           if (sum === 2) {
             const resources = this.offer.bundle.reduce<number[]>(
-              (acc, cur, index) => (cur !== 0 ? acc : [...acc, index]),
+              (acc, cur, index) => (cur !== 0 ? [...acc, index] : acc),
               []
             );
 
@@ -69,11 +69,10 @@ class YearPlenty extends PIXI.Container implements Updatable {
               });
             }
 
-            // console.log(this.selectedResources);
-
             // check if resources are valid (enough in bank)
             const action = this.getPotentialAction();
             if (gameui.game.isValidAction(action).valid) {
+              console.log('resources:', this.selectedResources);
               gameui.game.handleAction(action);
               gameui.update();
 
