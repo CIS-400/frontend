@@ -7,8 +7,8 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <h1 className="home-title"> settlers.io </h1>
-      <p className="home-subtitle"> Welcome to settlers.io, the online platform to play the classic board game Settlers of Catan! </p>
+      <h1 className="home-title"> Settlers.io </h1>
+      <p className="home-subtitle"> Welcome to Settlers.io, the online platform to play the classic board game Settlers of Catan! </p>
       <div className="home-rules-container">
         <h2 className="home-rules-title"> Game Rules </h2>
         <ul className="home-rules-list">
