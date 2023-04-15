@@ -7,8 +7,6 @@
     justify-content: center;
     height: 100vh;
     background-color: #f5f5f5;
-    background-image: url('../assets/background.jpeg');
-    background-size: cover;
   }
   
   .home-title {
@@ -65,6 +63,7 @@
     background-color: #ffffff;
     color: #008080;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #008080;
   }
   
   .home-rules-list {
