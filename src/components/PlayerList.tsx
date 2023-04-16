@@ -5,6 +5,9 @@ import { AppContext, AppStateAction } from '../store'
 import ChatInput from './ChatInput'
 import ClientController from 'src/client-controller'
 
+import './PlayerList.css'
+
+
 const PlayerList = (props: {}) => {
   const [state, dispatch] = useContext(AppContext)
   const RED = '#D20001'
@@ -13,23 +16,24 @@ const PlayerList = (props: {}) => {
   const YELLOW = '#F59B23'
   const colors = [RED, BLUE, GREEN, YELLOW]
 
-  const readyClicked = (e: any) => {
-    const { clientController } = lobbyContext
+  const readyClicked = (ready: boolean) => {
+    const { clientController } = lobbyContext;
+    const newReadyStatus = !ready;
     dispatch({
       type: AppStateAction.SetReadyStatus,
       payload: {
         pid: clientController.pid,
-        ready: e.target.checked,
+        ready: newReadyStatus,
       },
     })
-    clientController.setReadyStatus(e.target.checked)
+    clientController.setReadyStatus(newReadyStatus);
   }
 
   return (
-    <div>
-      <h1>Player List</h1>
+    <div className='player-list-container'>
+      <h1 className='player-list-title'>Player List</h1>
       {state.lobby.players.map(({ name, pid, ready, number }) => (
-        <div key={pid}>
+        <div key={pid} className='player-item'>
           {state.lobby.status === LobbyStatus.InGame && (
             <span
               style={{
@@ -46,32 +50,34 @@ const PlayerList = (props: {}) => {
 
           {state.lobby.status === LobbyStatus.PreGame && (
             <>
-              <div>
+              <div className='player-item-name'>
                 {' '}
                 {name} {pid === state.lobby.owner && '👑'}{' '}
               </div>
-              <input
-                type="checkbox"
-                checked={ready}
+              <button
+                className="playerlist-ready-button"
                 disabled={pid !== lobbyContext.clientController.pid}
-                onChange={readyClicked}
-              />
+                onClick={() => readyClicked(ready)}
+              >
+                {ready ? "Ready ✅" : "Ready?"}
+              </button>
               {pid === lobbyContext.clientController.pid && (
-                <>
-                  <span>set name:</span>
-                  <ChatInput
-                    onSend={(val) => {
-                      const prevHash = name.substring(name.indexOf('#') + 1)
-                      const newName = val + '#' + prevHash
-                      dispatch({
-                        type: AppStateAction.SetName,
-                        payload: { name: newName, pid: pid },
-                      })
-                      lobbyContext.clientController.setName(newName)
-                    }}
-                  />
-                </>
-              )}
+                 <div className='playerlist-edit-username'>
+                   <label>set name:</label>
+                   <ChatInput 
+                   className="playerlist-edit-username-input"
+                     onSend={(val) => {
+                       const prevHash = name.substring(name.indexOf('#') + 1)
+                       const newName = val + '#' + prevHash
+                       dispatch({
+                         type: AppStateAction.SetName,
+                         payload: { name: newName, pid: pid },
+                       })
+                       lobbyContext.clientController.setName(newName)
+                     }}
+                   />
+                 </div>
+               )}
             </>
           )}
         </div>
