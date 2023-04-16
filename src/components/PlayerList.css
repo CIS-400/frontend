@@ -15,7 +15,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 1.5rem;
+    font-size: 1rem;
     margin-bottom: 10px;
   }
   
@@ -66,8 +66,10 @@
   }
   
   .playerlist-edit-username > label {
+    margin-left: 1rem;
     margin-right: 0.5rem;
     font-weight: bold;
+    font-size: 1rem;
   }
   
   .playerlist-edit-username > .chat-input {
