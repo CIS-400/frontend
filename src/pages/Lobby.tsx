@@ -10,6 +10,7 @@ import lobbyContext from '../lobby-context'
 import { AppContext, AppStateAction } from '../store'
 
 import './Lobby.css'
+import WinnerScreen from 'src/components/InGame/WinnerScreen'
 
 const seedrandom = require('seedrandom')
 

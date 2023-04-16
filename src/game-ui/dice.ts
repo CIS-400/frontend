@@ -23,7 +23,7 @@ class Dice extends PIXI.Container implements Updatable {
     this.sprites[1].anchor.set(0.5);
     this.sprites[0].y = height / 2;
     this.sprites[1].y = height / 2;
-    this.sprites[1].x = width / 2;
+    this.sprites[1].x = width / 2.2;
     this.interactive = true;
     this.addChild(...this.sprites);
     this.on("click", this._onclick.bind(this));
