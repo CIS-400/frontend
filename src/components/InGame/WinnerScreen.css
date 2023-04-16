@@ -1,0 +1,24 @@
+.winner-screen-container {
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f7f7f7;
+  }
+  
+  .winner-screen-message {
+    padding-top: 200px;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #008080;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .winner-screen-message-2 {
+    padding-top: 50px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #008080;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
