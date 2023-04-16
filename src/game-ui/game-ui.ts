@@ -44,15 +44,16 @@ class GameUI {
     this.game = game
     // TODO, DELETE. FOR TESTING
     game.currPlayer.devCards.add(SETTLERS.DevCard.YearOfPlenty)
-    game.currPlayer.devCards.add(SETTLERS.DevCard.YearOfPlenty)
-    game.currPlayer.devCards.add(SETTLERS.DevCard.Monopoly)
     game.currPlayer.devCards.add(SETTLERS.DevCard.Monopoly)
     game.currPlayer.devCards.add(SETTLERS.DevCard.Knight)
     game.currPlayer.devCards.add(SETTLERS.DevCard.Knight)
     game.currPlayer.devCards.add(SETTLERS.DevCard.Knight)
     game.currPlayer.devCards.add(SETTLERS.DevCard.RoadBuilder)
-    for (let i = 0; i < 7; i++)
-      game.currPlayer.devCards.add(SETTLERS.DevCard.VictoryPoint)
+    game.currPlayer.resources.bundle[SETTLERS.Resource.Brick] += 100;
+    game.currPlayer.resources.bundle[SETTLERS.Resource.Grain] += 100;
+    game.currPlayer.resources.bundle[SETTLERS.Resource.Lumber] += 100;
+    game.currPlayer.resources.bundle[SETTLERS.Resource.Wool] += 100;
+    game.currPlayer.resources.bundle[SETTLERS.Resource.Ore] += 100;
     //
     
     this.eventHandlers = {} as Record<
