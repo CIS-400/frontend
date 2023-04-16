@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import GameUI, { UIEvents } from '../../game-ui/game-ui'
 import * as SETTLERS from 'settlers'
-import { AppContext } from 'src/store'
+import { AppContext, AppStateAction } from 'src/store'
 import lobbyContext from 'src/lobby-context'
 
 export default class GameBoard extends React.Component<{}> {
@@ -14,12 +14,19 @@ export default class GameBoard extends React.Component<{}> {
     this.handleGetAction = this.handleGetAction.bind(this)
   }
   async componentDidMount() {
+    const [state, dispatch] = this.context
     lobbyContext.gameState = new SETTLERS.Game()
     lobbyContext.gameUI = new GameUI(lobbyContext.gameState)
     const { gameState, gameUI, clientController } = lobbyContext
     console.log('mount gameState', gameState)
     for (const uievent of Object.values(UIEvents)) {
       gameUI.addEventHandler(uievent as UIEvents, (action: SETTLERS.Action) => {
+        if (gameState.getWinner() !== -1) {
+          dispatch({
+            type: AppStateAction.SetWinner,
+            payload: gameState.getWinner(),
+          })
+        }
         clientController.sendAction(action.serialized())
       })
     }
@@ -37,6 +44,7 @@ export default class GameBoard extends React.Component<{}> {
   }
 
   async handleGetAction(actionSerialied: string) {
+    const [state, dispatch] = this.context
     const { gameState, gameUI } = lobbyContext
     //await console.log('before gamestate\n', gameState!.toLog())
     await console.log('action', actionSerialied)
@@ -48,6 +56,12 @@ export default class GameBoard extends React.Component<{}> {
     )
     gameState!.handleAction(action)
     gameUI!.update()
+    if (gameState!.getWinner() !== -1) {
+      dispatch({
+        type: AppStateAction.SetWinner,
+        payload: gameState!.getWinner(),
+      })
+    }
     this.forceUpdate()
     //await console.log('after gamestate\n', gameState!.toLog())
   }

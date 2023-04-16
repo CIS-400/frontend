@@ -13,6 +13,7 @@ interface AppState {
     players: { pid: string; name: string; ready: boolean; number: number }[]
     owner?: string
     status: LobbyStatus
+    winner: number | null
   }
 }
 
@@ -26,6 +27,7 @@ const initialState: AppState = {
     chat: [],
     players: [],
     status: LobbyStatus.PreGame,
+    winner: null,
   },
 }
 
@@ -37,6 +39,7 @@ export enum AppStateAction {
   SetReadyStatus,
   SetLobbyStatus,
   SetName,
+  SetWinner,
 }
 
 const reducer = (
@@ -122,6 +125,14 @@ const reducer = (
               ? { ...player, name: action.payload.name }
               : player,
           ),
+        },
+      }
+    case AppStateAction.SetWinner:
+      return {
+        ...state,
+        lobby: {
+          ...state.lobby,
+          winner: action.payload,
         },
       }
   }
