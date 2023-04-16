@@ -93,8 +93,7 @@ export default class Lobby extends React.Component<LobbyProps, LobbyState> {
       case LobbyStatus.InGame:
         return (
           <>
-          <WinnerScreen />
-            {/* {state.lobby.winner !== null && <WinnerScreen />}
+            {state.lobby.winner !== null && <WinnerScreen />}
             <div style={{ display: 'flex', alignItems: 'flex-start' }}>
               <GameBoard />
 
@@ -115,7 +114,7 @@ export default class Lobby extends React.Component<LobbyProps, LobbyState> {
                   <LobbyChat />
                 </div>
               </div>
-            </div> */}
+            </div>
           </>
         )
       case LobbyStatus.PostGame:
