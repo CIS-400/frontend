@@ -29,7 +29,7 @@ export default class ClientController {
   public initializeConnection(lid: string) {
     if (this.socket !== undefined) return
     console.log('cookies', document.cookie)
-    this.socket = io(`http://localhost:8000/${lid}`, {
+    this.socket = io(`http://34.227.103.138:8000/${lid}`, {
       extraHeaders: {
         'allow-list-id': parse(document.cookie)['allow-list-id'] ?? '',
       },

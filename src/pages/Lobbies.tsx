@@ -80,7 +80,7 @@ const Lobbies = () => {
       }
     });
   
-    const response = await fetch('http://localhost:8000/api/create-lobby', {
+    const response = await fetch('http://34.227.103.138:8000/api/create-lobby', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
