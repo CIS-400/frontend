@@ -23,6 +23,7 @@ export default class ClientController {
     'start-game': [],
     'get-action': [],
     'set-seed': [],
+    'set-name': [],
   }
 
   public initializeConnection(lid: string) {
@@ -35,7 +36,9 @@ export default class ClientController {
     })
     this.socket.once('connect', () => {
       this.pid = this.socket!.id
-      this.socket!.emit('add-player', { name: randomName() })
+      this.socket!.emit('add-player', {
+        name: 'guest#' + randomHash(),
+      })
     })
     const events = Object.keys(
       this.serverEventListeners,
@@ -80,15 +83,15 @@ export default class ClientController {
     this.socket!.emit('action', action)
   }
 
+  public setName(name: string) {
+    this.socket!.emit('set-name', name)
+  }
+
   public startGame() {
     this.socket!.emit('start-game')
   }
 }
 
-function randomName() {
-  const names = ['aydan', 'henry', 'zach', 'tom']
-  return (
-    names[Math.floor(Math.random() * names.length)] +
-    Math.floor(Math.random() * 1000).toString()
-  )
+function randomHash() {
+  return Math.floor(Math.random() * 1000).toString()
 }

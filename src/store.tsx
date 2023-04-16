@@ -36,6 +36,7 @@ export enum AppStateAction {
   RemovePlayer,
   SetReadyStatus,
   SetLobbyStatus,
+  SetName,
 }
 
 const reducer = (
@@ -109,6 +110,18 @@ const reducer = (
         lobby: {
           ...state.lobby,
           status: action.payload,
+        },
+      }
+    case AppStateAction.SetName:
+      return {
+        ...state,
+        lobby: {
+          ...state.lobby,
+          players: state.lobby.players.map((player) =>
+            player.pid === action.payload.pid
+              ? { ...player, name: action.payload.name }
+              : player,
+          ),
         },
       }
   }

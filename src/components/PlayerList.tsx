@@ -2,6 +2,8 @@ import React, { useContext } from 'react'
 import lobbyContext from '../lobby-context'
 import { LobbyStatus } from '../../../backend/src/lobby'
 import { AppContext, AppStateAction } from '../store'
+import ChatInput from './ChatInput'
+import ClientController from 'src/client-controller'
 
 const PlayerList = (props: {}) => {
   const [state, dispatch] = useContext(AppContext)
@@ -54,6 +56,22 @@ const PlayerList = (props: {}) => {
                 disabled={pid !== lobbyContext.clientController.pid}
                 onChange={readyClicked}
               />
+              {pid === lobbyContext.clientController.pid && (
+                <>
+                  <span>set name:</span>
+                  <ChatInput
+                    onSend={(val) => {
+                      const prevHash = name.substring(name.indexOf('#') + 1)
+                      const newName = val + '#' + prevHash
+                      dispatch({
+                        type: AppStateAction.SetName,
+                        payload: { name: newName, pid: pid },
+                      })
+                      lobbyContext.clientController.setName(newName)
+                    }}
+                  />
+                </>
+              )}
             </>
           )}
         </div>

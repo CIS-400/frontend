@@ -15,8 +15,7 @@ type LobbyProps = {
 }
 
 type LobbyState = {
-    clientController: any,
-  
+  clientController: any
 }
 
 export default class Lobby extends React.Component<LobbyProps, LobbyState> {
@@ -40,20 +39,25 @@ export default class Lobby extends React.Component<LobbyProps, LobbyState> {
     })
     clientController.addServerEventListener('add-player', (payload) => {
       if (lobbyContext.clientController.pid === payload.pid)
-      lobbyContext.clientController.number = payload.number
+        lobbyContext.clientController.number = payload.number
       dispatch({ type: AppStateAction.AddPlayer, payload })
     })
     clientController.addServerEventListener('remove-player', (payload) =>
       dispatch({ type: AppStateAction.RemovePlayer, payload }),
     )
-    clientController.addServerEventListener('set-ready-status', (payload: any) =>
-      dispatch({ type: AppStateAction.SetReadyStatus, payload }),
+    clientController.addServerEventListener(
+      'set-ready-status',
+      (payload: any) =>
+        dispatch({ type: AppStateAction.SetReadyStatus, payload }),
     )
     clientController.addServerEventListener('update-settings', (payload: any) =>
       dispatch({ type: AppStateAction.ChangeLobbySetting, payload }),
     )
     clientController.addServerEventListener('chat-message', (payload: any) =>
       dispatch({ type: AppStateAction.SendChatMessage, payload }),
+    )
+    clientController.addServerEventListener('set-name', (payload: any) =>
+      dispatch({ type: AppStateAction.SetName, payload }),
     )
     clientController.addServerEventListener('start-game', () => {
       dispatch({
@@ -71,13 +75,11 @@ export default class Lobby extends React.Component<LobbyProps, LobbyState> {
       case LobbyStatus.PreGame:
         return (
           <>
-            <GameSettings
-              lobbyid={this.props.lobby_url}
-            />
+            <GameSettings lobbyid={this.props.lobby_url} />
             <hr />
             <LobbyChat />
             <hr />
-            <PlayerList />  
+            <PlayerList />
           </>
         )
       case LobbyStatus.InGame:
@@ -91,7 +93,7 @@ export default class Lobby extends React.Component<LobbyProps, LobbyState> {
                   width: '30%',
                   marginLeft: '1%',
                   display: 'flex',
-                  flexDirection: 'column'
+                  flexDirection: 'column',
                 }}
               >
                 <PlayerList />
@@ -101,7 +103,6 @@ export default class Lobby extends React.Component<LobbyProps, LobbyState> {
                   <LobbyChat />
                 </div>
               </div>
-
             </div>
           </>
         )
