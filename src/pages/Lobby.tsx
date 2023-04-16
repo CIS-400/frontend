@@ -103,12 +103,14 @@ export default class Lobby extends React.Component<LobbyProps, LobbyState> {
                   flexDirection: 'column',
                 }}
               >
+                <div className="player-list-container">
                 <PlayerList />
+              </div>
 
                 <div style={{ flex: 1 }}></div>
-                <div style={{ marginTop: 'auto' }}>
-                  <LobbyChat />
-                </div>
+                <div className="chat-container" style={{ maxHeight: '500px' }}>
+                <LobbyChat />
+              </div>
               </div>
             </div>
           </>
