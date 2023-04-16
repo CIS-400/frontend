@@ -6,11 +6,11 @@ import GameSettings from '../components/GameSettings'
 import LobbyChat from '../components/LobbyChat'
 import PlayerList from '../components/PlayerList'
 import GameBoard from '../components/InGame/GameBoard'
+import WinnerScreen from '../components/InGame/WinnerScreen'
 import lobbyContext from '../lobby-context'
 import { AppContext, AppStateAction } from '../store'
 
 import './Lobby.css'
-import WinnerScreen from 'src/components/InGame/WinnerScreen'
 
 const seedrandom = require('seedrandom')
 
@@ -93,7 +93,8 @@ export default class Lobby extends React.Component<LobbyProps, LobbyState> {
       case LobbyStatus.InGame:
         return (
           <>
-            {state.lobby.winner !== null && <WinnerScreen />}
+          <WinnerScreen />
+            {/* {state.lobby.winner !== null && <WinnerScreen />}
             <div style={{ display: 'flex', alignItems: 'flex-start' }}>
               <GameBoard />
 
@@ -114,7 +115,7 @@ export default class Lobby extends React.Component<LobbyProps, LobbyState> {
                   <LobbyChat />
                 </div>
               </div>
-            </div>
+            </div> */}
           </>
         )
       case LobbyStatus.PostGame:
