@@ -1,0 +1,23 @@
+.lobby-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    height: 100vh;
+  }
+  
+  .lobby-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .player-list-container {
+    grid-column: 1 / 2;
+  }
+  
+  .chat-container {
+    grid-column: 2 / 3;
+  }
+  

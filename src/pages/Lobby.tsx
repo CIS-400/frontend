@@ -8,6 +8,9 @@ import PlayerList from '../components/PlayerList'
 import GameBoard from '../components/InGame/GameBoard'
 import lobbyContext from '../lobby-context'
 import { AppContext, AppStateAction } from '../store'
+
+import './Lobby.css'
+
 const seedrandom = require('seedrandom')
 
 type LobbyProps = {
@@ -74,13 +77,17 @@ export default class Lobby extends React.Component<LobbyProps, LobbyState> {
     switch (state.lobby.status) {
       case LobbyStatus.PreGame:
         return (
-          <>
+          <div className="lobby-container">
             <GameSettings lobbyid={this.props.lobby_url} />
-            <hr />
-            <LobbyChat />
-            <hr />
-            <PlayerList />
-          </>
+            <div className="lobby-content">
+              <div className="player-list-container">
+                <PlayerList />
+              </div>
+              <div className="chat-container">
+                <LobbyChat />
+              </div>
+            </div>
+          </div>
         )
       case LobbyStatus.InGame:
         return (
