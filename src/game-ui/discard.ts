@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 import * as SETTLERS from "settlers";
 import Box from "./box";
 import Button from "./button";
-import GameUI from "./game-ui";
+import GameUI, { UIEvents } from "./game-ui";
 import Updatable from "./updatable";
 
 class Discard extends PIXI.Container implements Updatable {
@@ -72,8 +72,8 @@ class Discard extends PIXI.Container implements Updatable {
           card,
           type: "up",
           onclick: () => {
-            this.toDiscard.set(resource, this.toDiscard.get(resource) + 1);
-            this.toDiscardText[i].text = this.toDiscard.get(resource);
+            this.toDiscard.bundle[resource]++;
+            this.toDiscardText[i].text = this.toDiscard.bundle[resource];
           },
         })
       );
@@ -82,8 +82,8 @@ class Discard extends PIXI.Container implements Updatable {
           card,
           type: "down",
           onclick: () => {
-            this.toDiscard.set(resource, this.toDiscard.get(resource) - 1);
-            this.toDiscardText[i].text = this.toDiscard.get(resource);
+            this.toDiscard.bundle[resource]--;
+            this.toDiscardText[i].text = this.toDiscard.bundle[resource];
           },
         })
       );
@@ -142,10 +142,10 @@ class Discard extends PIXI.Container implements Updatable {
     arrow.on("click", onclick);
     arrow.alpha = 0.5;
     arrow.on("mouseenter", () => {
-      this.alpha = 1;
+      arrow.alpha = 1;
     });
     arrow.on("mouseleave", () => {
-      this.alpha = 0.5;
+      arrow.alpha = 0.5;
     });
     arrow.position.set(
       card.x + card.width,
@@ -164,6 +164,7 @@ class Discard extends PIXI.Container implements Updatable {
       { bundle: this.toDiscard }
     );
     if (game.isValidAction(action).valid) {
+      this.gameui.runEventHandlers(UIEvents.Discard, action);
       game.handleAction(action);
       this.gameui.update();
     }

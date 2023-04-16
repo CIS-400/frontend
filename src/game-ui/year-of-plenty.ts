@@ -72,10 +72,9 @@ class YearPlenty extends PIXI.Container implements Updatable {
             // check if resources are valid (enough in bank)
             const action = this.getPotentialAction();
             if (gameui.game.isValidAction(action).valid) {
-              console.log('resources:', this.selectedResources);
+              gameui.runEventHandlers(UIEvents.SelectYearOfPlentyResources, action);
               gameui.game.handleAction(action);
               gameui.update();
-
               this.visible = false;
             }
           }
@@ -158,15 +157,6 @@ class YearPlenty extends PIXI.Container implements Updatable {
     this.visible = true;
   }
 
-  _onclick() {
-    const { game } = this.gameui;
-    const action = this.getPotentialAction();
-    if (!game.isValidAction(action).valid) return;
-    game.handleAction(action);
-    this.gameui.runEventHandlers(UIEvents.SelectYearOfPlentyResources, action);
-    this.gameui.update();
-  }
-
   private getPotentialAction() {
     return new SETTLERS.Action(
       SETTLERS.ActionType.SelectYearOfPlentyResources,
@@ -196,10 +186,10 @@ class YearPlenty extends PIXI.Container implements Updatable {
     arrow.on("click", onclick);
     arrow.alpha = 0.5;
     arrow.on("mouseenter", () => {
-      this.alpha = 1;
+      arrow.alpha = 1;
     });
     arrow.on("mouseleave", () => {
-      this.alpha = 0.5;
+      arrow.alpha = 0.5;
     });
     arrow.position.set(
       card.x + card.width,
