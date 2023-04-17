@@ -9,7 +9,7 @@ class EndTurn extends PIXI.Sprite implements Updatable {
     super();
     this.gameui = gameui;
     this.position.set(
-      0.97 * gameui.app.view.width,
+      0.965 * gameui.app.view.width,
       0.925 * gameui.app.view.height
     );
     this.texture = this.gameui.textures["end_turn"];

@@ -39,7 +39,7 @@ const PlayerList = (props: {}) => {
                 color: colors[number],
                 fontWeight:
                   number === lobbyContext.clientController.number
-                    ? 'bold'
+                    ? '900'
                     : 'normal',
               }}
             >
