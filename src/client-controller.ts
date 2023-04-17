@@ -37,7 +37,7 @@ export default class ClientController {
     this.socket.once('connect', () => {
       this.pid = this.socket!.id
       this.socket!.emit('add-player', {
-        name: 'guest#' + randomHash(),
+        name: 'guest',
       })
     })
     const events = Object.keys(
@@ -90,8 +90,4 @@ export default class ClientController {
   public startGame() {
     this.socket!.emit('start-game')
   }
-}
-
-function randomHash() {
-  return Math.floor(Math.random() * 1000).toString()
 }
